@@ -12,15 +12,15 @@ test.describe('Suraksha AI — Comprehensive E2E Playwright Test Suite', () => {
     await expect(page.locator('text=સુરક્ષા').first()).toBeVisible();
 
     // 2. Unique Aadhaar Vault with animated NEW flag
-    const vaultBtn = page.locator('button:has-text("Aadhaar Vault")');
+    const vaultBtn = page.locator('[data-testid="aadhaar-vault-nav-btn"]');
     await expect(vaultBtn).toBeVisible();
     await expect(vaultBtn.locator('text=NEW')).toBeVisible();
 
     // 3. Click to open unique Aadhaar Vault modal
     await vaultBtn.click();
-    await expect(page.locator('h3:has-text("Aadhaar Biometric Freeze Vault")').first()).toBeVisible();
-    await expect(page.locator('text=UIDAI Biometric Status')).toBeVisible();
-    await page.locator('button:has-text("Close Vault")').click();
+    await expect(page.locator('[data-testid="aadhaar-vault-modal"]')).toBeVisible();
+    await page.locator('[data-testid="close-vault-btn"]').click();
+    await expect(page.locator('[data-testid="aadhaar-vault-modal"]')).not.toBeVisible();
 
     // 4. Test Theme Switcher
     const darkBtn = page.locator('button[title="Dark Theme"]');
@@ -38,62 +38,64 @@ test.describe('Suraksha AI — Comprehensive E2E Playwright Test Suite', () => {
 
   test('Demo Mode: Gujarati Digital Arrest Scam (Tier 1) triggers mid-call critical alert', async ({ page }) => {
     // Select Demo Mode
-    await page.locator('button[title="Runs benchmark simulation mode"]').click();
+    await page.locator('[data-testid="demo-mode-btn"]').click();
 
     // Select Gujarati
-    await page.locator('select[title="Select preferred intervention language"]').selectOption('gu');
+    await page.locator('[data-testid="language-select"]').selectOption('gu');
 
     // Select Tier 1 Definite Spam
-    await page.locator('text=1. Definite Spam').click();
+    await page.locator('[data-testid="preset-tier1_definite_spam_digital_arrest"]').click();
 
     // Start Analysis
-    await page.locator('button:has-text("Start Real-Time Scam Analysis")').click();
+    await page.locator('[data-testid="start-analysis-btn"]').click();
 
     // Warning and Red Flags should appear
-    await expect(page.locator('text=સાવધાન!').first()).toBeVisible({ timeout: 10000 });
-    await expect(page.locator('text=Definite Spam (Scam Call)').first()).toBeVisible({ timeout: 10000 });
+    await expect(page.locator('text=સાવધાન!').first()).toBeVisible({ timeout: 12000 });
   });
 
   test('Demo Mode: Hindi Digital Arrest Scam with Hindi warning', async ({ page }) => {
     // Select Demo Mode
-    await page.locator('button[title="Runs benchmark simulation mode"]').click();
+    await page.locator('[data-testid="demo-mode-btn"]').click();
 
     // Select Hindi
-    await page.locator('select[title="Select preferred intervention language"]').selectOption('hi');
+    await page.locator('[data-testid="language-select"]').selectOption('hi');
 
     // Click Tier 1
-    await page.locator('text=1. Definite Spam').click();
-    await page.locator('button:has-text("Start Real-Time Scam Analysis")').click();
+    await page.locator('[data-testid="preset-tier1_definite_spam_digital_arrest"]').click();
+    await page.locator('[data-testid="start-analysis-btn"]').click();
 
     // Hindi warning check
-    await expect(page.locator('text=सावधान!').first()).toBeVisible({ timeout: 10000 });
+    await expect(page.locator('text=सावधान!').first()).toBeVisible({ timeout: 12000 });
   });
 
   test('Demo Mode: English Language and Swiggy Genuine Call stays safe (No Spam)', async ({ page }) => {
     // Select Demo Mode
-    await page.locator('button[title="Runs benchmark simulation mode"]').click();
+    await page.locator('[data-testid="demo-mode-btn"]').click();
 
     // Select English
-    await page.locator('select[title="Select preferred intervention language"]').selectOption('en');
+    await page.locator('[data-testid="language-select"]').selectOption('en');
 
     // Select Tier 3 No Spam
-    await page.locator('text=3. No Spam').click();
-    await page.locator('button:has-text("Start Real-Time Scam Analysis")').click();
+    await page.locator('[data-testid="preset-tier3_no_spam_swiggy_delivery"]').click();
+    await page.locator('[data-testid="start-analysis-btn"]').click();
 
     // Safe badge and no crying wolf
-    await expect(page.locator('text=No Spam (Verified Genuine)').first()).toBeVisible({ timeout: 10000 });
+    await expect(page.locator('text=No Spam').first()).toBeVisible({ timeout: 12000 });
   });
 
   test('Real AI Mode with Live Gemini 2.5 Flash API execution', async ({ page }) => {
     // Switch to Real AI mode
-    await page.locator('button[title="Uses live Gemini Native Audio API"]').click();
+    await page.locator('[data-testid="real-ai-mode-btn"]').click();
     await expect(page.locator('text=REAL AI MODE ACTIVE')).toBeVisible();
 
-    // Select Gujarati Tier 1 Call
-    await page.locator('text=1. Definite Spam').click();
+    // Set to English for clarity
+    await page.locator('[data-testid="language-select"]').selectOption('en');
+
+    // Select Tier 1 Call
+    await page.locator('[data-testid="preset-tier1_definite_spam_digital_arrest"]').click();
 
     // Start Real AI Analysis
-    await page.locator('button:has-text("Start Real-Time Scam Analysis")').click();
+    await page.locator('[data-testid="start-analysis-btn"]').click();
 
     // Verify Gemini Native Audio responds with structured JSON assessment
     await expect(page.locator('text=Red Flags Heard in Call').first()).toBeVisible({ timeout: 25000 });

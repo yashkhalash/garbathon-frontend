@@ -131,6 +131,7 @@ export const Header: React.FC<HeaderProps> = ({
               {/* UNIQUE AADHAAR VAULT (Pulsing Glow & Clear Text) */}
               <button
                 onClick={() => setIsVaultOpen(true)}
+                data-testid="aadhaar-vault-nav-btn"
                 className="relative group flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500/15 via-rose-500/15 to-amber-500/15 border border-amber-400/40 hover:border-amber-300 text-amber-200 text-xs font-black transition-all hover:scale-[1.03] active:scale-95 shadow-md"
                 title="Open Aadhaar Biometric Freeze Vault against Digital Arrests"
               >
@@ -191,6 +192,7 @@ export const Header: React.FC<HeaderProps> = ({
               <div className="flex items-center bg-slate-900/90 rounded-xl p-1 border border-slate-800 text-xs shadow-inner">
                 <button
                   onClick={() => setIsDemoMode(false)}
+                  data-testid="real-ai-mode-btn"
                   className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-black transition-all ${
                     !isDemoMode
                       ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md'
@@ -203,6 +205,7 @@ export const Header: React.FC<HeaderProps> = ({
                 </button>
                 <button
                   onClick={() => setIsDemoMode(true)}
+                  data-testid="demo-mode-btn"
                   className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-black transition-all ${
                     isDemoMode
                       ? 'bg-amber-600 text-white shadow-md'
@@ -220,6 +223,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <select
                   value={language}
                   onChange={(e) => setLanguage(e.target.value as WarningLanguage)}
+                  data-testid="language-select"
                   className="bg-slate-900 text-white border border-slate-700/80 rounded-xl px-3 py-1.5 text-xs font-black focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer shadow-sm hover:border-slate-500 transition-colors"
                   title="Select preferred intervention language"
                 >

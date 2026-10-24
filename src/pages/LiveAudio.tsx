@@ -136,6 +136,7 @@ export const LiveAudio: React.FC<LiveAudioProps> = ({ language, isDemoMode }) =>
           riskLevel={riskLevel}
           riskScore={riskScore}
           summary={summary}
+          language={language}
         />
 
         <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">

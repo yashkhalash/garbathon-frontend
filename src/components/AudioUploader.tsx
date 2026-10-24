@@ -1,14 +1,16 @@
 import React, { useRef, useState } from 'react';
 import { UploadCloud, Check, AlertTriangle, Play, ShieldAlert, AlertCircle, ShieldCheck } from 'lucide-react';
 import { DEMO_PRESETS } from '../services/scamAnalysisService';
-import { DemoCallPreset } from '../types/analysis';
+import { DemoCallPreset, WarningLanguage } from '../types/analysis';
 import { validateAudioFile } from '../utils/audioValidation';
+import { TRANSLATIONS } from '../utils/translations';
 
 interface AudioUploaderProps {
   onAudioSelected: (file: File | null, presetUrl?: string, preset?: DemoCallPreset) => void;
   selectedPresetId: string | null;
   setSelectedPresetId: (id: string | null) => void;
   isAnalyzing: boolean;
+  language: WarningLanguage;
 }
 
 export const AudioUploader: React.FC<AudioUploaderProps> = ({
@@ -16,10 +18,13 @@ export const AudioUploader: React.FC<AudioUploaderProps> = ({
   selectedPresetId,
   setSelectedPresetId,
   isAnalyzing,
+  language,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
+
+  const t = TRANSLATIONS[language]?.uploader || TRANSLATIONS.gu.uploader;
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -51,7 +56,7 @@ export const AudioUploader: React.FC<AudioUploaderProps> = ({
           <span className="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-black">
             1
           </span>
-          <span>STEP 1: Select or Upload Call Audio (.WAV)</span>
+          <span>{t.title}</span>
         </h2>
         <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
           16kHz Mono
@@ -59,7 +64,7 @@ export const AudioUploader: React.FC<AudioUploaderProps> = ({
       </div>
 
       <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
-        Choose one of the 3 tiered benchmark calls to observe how the AI distinguishes between <strong>Definite Spam</strong>, <strong>Partially Spam</strong>, and <strong>Genuine Calls</strong>.
+        {t.subtitle}
       </p>
 
       {/* 3 Tier Presets Grid */}
@@ -81,6 +86,7 @@ export const AudioUploader: React.FC<AudioUploaderProps> = ({
           return (
             <button
               key={preset.id}
+              data-testid={`preset-${preset.id}`}
               onClick={() => handleSelectPreset(preset)}
               disabled={isAnalyzing}
               className={`w-full text-left p-3.5 sm:p-4 rounded-xl border-2 transition-all flex flex-col justify-between ${borderTheme} ${
@@ -123,7 +129,7 @@ export const AudioUploader: React.FC<AudioUploaderProps> = ({
                 <span className="font-mono text-[11px]">Audio Duration: ~{preset.durationSeconds}s WAV</span>
                 <span className="flex items-center text-blue-600 dark:text-blue-400 font-bold">
                   <Play className="w-3.5 h-3.5 mr-1" />
-                  Select This Benchmark
+                  {t.selectBenchmark}
                 </span>
               </div>
             </button>
@@ -163,9 +169,9 @@ export const AudioUploader: React.FC<AudioUploaderProps> = ({
               <>
                 <UploadCloud className="w-6 h-6 text-slate-400 mb-1" />
                 <p className="text-xs font-semibold text-navy-900 dark:text-slate-200">
-                  Or click to upload your own custom <span className="text-blue-600 dark:text-blue-400 font-bold">.WAV recording</span>
+                  {t.uploadWav}
                 </p>
-                <p className="text-[11px] text-slate-400 mt-0.5">Supports 16kHz PCM audio files</p>
+                <p className="text-[11px] text-slate-400 mt-0.5">{t.formatNotice}</p>
               </>
             )}
           </div>

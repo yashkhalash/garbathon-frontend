@@ -1,6 +1,7 @@
 import React from 'react';
-import { Upload, PlayCircle, Eye, AlertOctagon, PhoneForwarded } from 'lucide-react';
+import { Upload, PlayCircle, Eye, PhoneForwarded } from 'lucide-react';
 import { WarningLanguage } from '../types/analysis';
+import { TRANSLATIONS } from '../utils/translations';
 
 interface StepGuideProps {
   currentStep: number;
@@ -8,46 +9,32 @@ interface StepGuideProps {
 }
 
 export const StepGuide: React.FC<StepGuideProps> = ({ currentStep, language }) => {
+  const t = TRANSLATIONS[language]?.steps || TRANSLATIONS.gu.steps;
+
   const steps = [
     {
       num: 1,
       icon: <Upload className="w-4 h-4" />,
-      title_gu: "૧. કોલ પસંદ કરો",
-      title_hi: "1. कॉल चुनें",
-      title_en: "1. Select Call",
-      desc_gu: "સ્કેમ, શંકાસ્પદ કે સુરક્ષિત કોલ પસંદ કરો",
-      desc_hi: "स्पैम, संदिग्ध या सुरक्षित कॉल चुनें",
-      desc_en: "Choose 1 of 3 tiered benchmark WAVs",
+      title: t.step1.title,
+      desc: t.step1.desc,
     },
     {
       num: 2,
       icon: <PlayCircle className="w-4 h-4" />,
-      title_gu: "૨. વિશ્લેષણ શરૂ કરો",
-      title_hi: "2. विश्लेषण शुरू करें",
-      title_en: "2. Start Analysis",
-      desc_gu: "૫ સેકન્ડના ટુકડાઓમાં સ્કેન થશે",
-      desc_hi: "5 सेकंड के टुकड़ों में स्कैन होगा",
-      desc_en: "Streams audio in 5s chunks",
+      title: t.step2.title,
+      desc: t.step2.desc,
     },
     {
       num: 3,
       icon: <Eye className="w-4 h-4" />,
-      title_gu: "૩. મિડ-કોલ ચેતવણી",
-      title_hi: "3. मिड-कॉल चेतावनी",
-      title_en: "3. Mid-Call Warning",
-      desc_gu: "ધમકી ઓળખી તરત અવાજમાં ચેતવશે",
-      desc_hi: "धमकी पहचानकर तुरंत अलर्ट देगा",
-      desc_en: "Spoken Gujarati/Hindi alert appears mid-call",
+      title: t.step3.title,
+      desc: t.step3.desc,
     },
     {
       num: 4,
       icon: <PhoneForwarded className="w-4 h-4" />,
-      title_gu: "૪. પરિવારને એલર્ટ",
-      title_hi: "4. परिवार को अलर्ट",
-      title_en: "4. Alert Contact",
-      desc_gu: "એકલતા તોડી પરિવારને સંદેશો મોકલો",
-      desc_hi: "अलगाव तोड़कर परिजन को SMS भेजें",
-      desc_en: "Breaks isolation with emergency SMS",
+      title: t.step4.title,
+      desc: t.step4.desc,
     },
   ];
 
@@ -55,10 +42,10 @@ export const StepGuide: React.FC<StepGuideProps> = ({ currentStep, language }) =
     <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-sm transition-colors duration-300">
       <div className="flex items-center justify-between mb-3 border-b border-slate-100 dark:border-slate-800 pb-2">
         <span className="text-xs font-black uppercase tracking-wider text-blue-600 dark:text-blue-400">
-          {language === 'gu' ? 'સરળ ઉપયોગ પદ્ધતિ (૪ સ્ટેપ)' : language === 'hi' ? 'सरल 4-चरणीय गाइड' : 'How Suraksha AI Works (4 Simple Steps)'}
+          {t.headerTitle}
         </span>
         <span className="text-[11px] font-bold text-slate-400">
-          Step {currentStep} of 4 Active
+          Step {currentStep} of 4 {t.stepActive}
         </span>
       </div>
 
@@ -66,9 +53,6 @@ export const StepGuide: React.FC<StepGuideProps> = ({ currentStep, language }) =
         {steps.map((st) => {
           const isActive = currentStep === st.num;
           const isDone = currentStep > st.num;
-
-          const title = language === 'gu' ? st.title_gu : language === 'hi' ? st.title_hi : st.title_en;
-          const desc = language === 'gu' ? st.desc_gu : language === 'hi' ? st.desc_hi : st.desc_en;
 
           return (
             <div
@@ -94,11 +78,11 @@ export const StepGuide: React.FC<StepGuideProps> = ({ currentStep, language }) =
                   {isDone ? '✓' : st.num}
                 </div>
                 <span className="text-xs font-bold text-navy-900 dark:text-slate-100">
-                  {title}
+                  {st.title}
                 </span>
               </div>
               <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-tight">
-                {desc}
+                {st.desc}
               </p>
             </div>
           );

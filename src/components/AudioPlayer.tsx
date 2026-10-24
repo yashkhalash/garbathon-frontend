@@ -1,6 +1,8 @@
 import React, { useRef, useEffect } from 'react';
 import { Play, Pause, RotateCcw, Cpu } from 'lucide-react';
 import { formatTime } from '../utils/audioValidation';
+import { WarningLanguage } from '../types/analysis';
+import { TRANSLATIONS } from '../utils/translations';
 
 interface AudioPlayerProps {
   audioUrl: string | null;
@@ -8,6 +10,7 @@ interface AudioPlayerProps {
   isAnalyzing: boolean;
   currentTime: number;
   duration: number;
+  language: WarningLanguage;
   onPlayPause: () => void;
   onRestart: () => void;
   onTimeUpdate: (time: number) => void;
@@ -23,6 +26,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
   isAnalyzing,
   currentTime,
   duration,
+  language,
   onPlayPause,
   onRestart,
   onTimeUpdate,
@@ -32,6 +36,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
   onStopAnalysis,
 }) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const t = TRANSLATIONS[language]?.player || TRANSLATIONS.gu.player;
 
   useEffect(() => {
     if (audioRef.current) {
@@ -59,10 +64,10 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
             <span className="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-black">
               2
             </span>
-            <span>STEP 2: Play &amp; Trigger Mid-Call Detection</span>
+            <span>{t.title}</span>
           </h2>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            Audio streams in 5-second chunks. Warnings appear <span className="font-bold text-navy-900 dark:text-slate-200">mid-call</span> as soon as coercion is heard.
+            {t.subtitle}
           </p>
         </div>
 
@@ -71,11 +76,11 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
           {isAnalyzing ? (
             <span className="flex items-center space-x-1.5 px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-xs font-extrabold animate-pulse border border-blue-200 dark:border-blue-800">
               <span className="w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400"></span>
-              <span>Gemini Listening</span>
+              <span>{t.listeningStatus}</span>
             </span>
           ) : (
             <span className="flex items-center space-x-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold">
-              <span>Ready</span>
+              <span>{t.readyStatus}</span>
             </span>
           )}
         </div>
@@ -143,6 +148,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
             <button
               onClick={onStartAnalysis}
               disabled={!audioUrl}
+              data-testid="start-analysis-btn"
               className={`flex items-center space-x-2 px-6 py-3 rounded-xl font-extrabold text-sm shadow-md transition-all ${
                 !audioUrl
                   ? 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed'
@@ -150,14 +156,15 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
               }`}
             >
               <Cpu className="w-4 h-4 text-blue-200" />
-              <span>Start Real-Time Scam Analysis</span>
+              <span>{t.startBtn}</span>
             </button>
           ) : (
             <button
               onClick={onStopAnalysis}
+              data-testid="stop-analysis-btn"
               className="flex items-center space-x-2 px-6 py-3 rounded-xl font-bold text-sm bg-rose-600 text-white hover:bg-rose-700 shadow-md transition-all active:scale-95"
             >
-              <span>Stop Analysis</span>
+              <span>{t.stopBtn}</span>
             </button>
           )}
         </div>

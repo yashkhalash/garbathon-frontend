@@ -1,5 +1,5 @@
-import { AadhaarVaultBanner } from "../components/AadhaarVaultBanner";
 import React, { useState, useRef, useEffect } from 'react';
+import { AadhaarVaultBanner } from "../components/AadhaarVaultBanner";
 import { StepGuide } from '../components/StepGuide';
 import { AudioUploader } from '../components/AudioUploader';
 import { AudioPlayer } from '../components/AudioPlayer';
@@ -23,6 +23,7 @@ import { splitAudioIntoWavChunks } from '../services/audioProcessor';
 import { analyzeAudioChunk, DEMO_PRESETS } from '../services/scamAnalysisService';
 import { speechWarningService } from '../services/speechWarningService';
 import { saveAnalysisSummary } from '../services/firebase';
+import { TRANSLATIONS } from '../utils/translations';
 
 interface DashboardProps {
   language: WarningLanguage;
@@ -30,7 +31,6 @@ interface DashboardProps {
 }
 
 export const Dashboard: React.FC<DashboardProps> = ({ language, isDemoMode }) => {
-  // Dynamic step indicator (1 to 4)
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   // Audio playback states
@@ -67,6 +67,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ language, isDemoMode }) =>
   // Emergency contact preferences
   const [relationship, setRelationship] = useState<string>('father');
   const [contactName, setContactName] = useState<string>('Ramesh Kumar');
+
+  const t = TRANSLATIONS[language] || TRANSLATIONS.gu;
 
   useEffect(() => {
     const savedRel = localStorage.getItem('suraksha_relationship');
@@ -127,7 +129,6 @@ export const Dashboard: React.FC<DashboardProps> = ({ language, isDemoMode }) =>
         fileOrBlob = await resp.blob();
       }
 
-      // Split audio into chunks (5 seconds duration, 1.2s overlap)
       const chunks = await splitAudioIntoWavChunks(fileOrBlob, 5, 1.2);
       setAudioChunks(chunks);
       setCurrentChunkIndex(0);
@@ -142,7 +143,6 @@ export const Dashboard: React.FC<DashboardProps> = ({ language, isDemoMode }) =>
         },
       ]);
 
-      // Begin sequential chunk dispatch
       processChunkSequentially(chunks, 0, '');
     } catch (err) {
       console.error("Error splitting or starting chunks:", err);
@@ -176,7 +176,6 @@ export const Dashboard: React.FC<DashboardProps> = ({ language, isDemoMode }) =>
         activePresetIdRef.current || undefined
       );
 
-      // Update Dashboard live results immediately
       setRiskLevel(response.risk_level);
       setRiskScore(response.risk_score);
       if (response.spam_classification) {
@@ -214,7 +213,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ language, isDemoMode }) =>
         setTimelineEvents((prev) => [...prev, ...newEvts]);
       }
 
-      // Speak warning aloud automatically mid-call if high risk
+      // Speak natural female voice warning aloud automatically mid-call if high risk
       if (response.should_warn && response.risk_score >= 65 && !shouldWarn) {
         speechWarningService.speak(response.warning_text, language);
         setTimelineEvents((prev) => [
@@ -222,7 +221,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ language, isDemoMode }) =>
           {
             id: `evt_warn_${Date.now()}`,
             timestampSeconds: Math.round(chunk.startTime),
-            label: `Spoken Mid-Call Safety Warning: "${response.warning_text}"`,
+            label: `Spoken Mid-Call Safety Warning (Female Voice): "${response.warning_text}"`,
             severity: 'critical',
             type: 'warning',
           },
@@ -304,10 +303,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ language, isDemoMode }) =>
 
   return (
     <div className="space-y-6">
-      {/* 4-Step Visual Progress Guide */}
       {/* Unique Feature: Aadhaar Vault Banner */}
       <AadhaarVaultBanner language={language} />
 
+      {/* 4-Step Visual Progress Guide */}
       <StepGuide currentStep={currentStep} language={language} />
 
       {/* Top Banner: Immediate Safety Warning displayed mid-call */}
@@ -333,6 +332,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ language, isDemoMode }) =>
             selectedPresetId={selectedPresetId}
             setSelectedPresetId={setSelectedPresetId}
             isAnalyzing={isAnalyzing}
+            language={language}
           />
 
           <AudioPlayer
@@ -341,6 +341,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ language, isDemoMode }) =>
             isAnalyzing={isAnalyzing}
             currentTime={currentTime}
             duration={duration}
+            language={language}
             onPlayPause={() => setIsPlaying(!isPlaying)}
             onRestart={() => {
               setCurrentTime(0);
@@ -372,23 +373,24 @@ export const Dashboard: React.FC<DashboardProps> = ({ language, isDemoMode }) =>
             riskScore={riskScore}
             summary={summary}
             spamTier={spamTier}
+            language={language}
           />
 
           {/* Red Flags Container */}
           <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 sm:p-6 border border-slate-200 dark:border-slate-800 shadow-sm transition-colors duration-300">
             <div className="flex items-center justify-between mb-3">
               <h3 className="font-bold text-navy-900 dark:text-white text-base">
-                Red Flags Heard in Call ({redFlags.length})
+                {t.redFlags.title} ({redFlags.length})
               </h3>
               <span className="text-xs text-slate-400 font-medium">
-                Exact Spoken Evidence
+                {t.redFlags.evidenceTitle}
               </span>
             </div>
 
             {redFlags.length === 0 ? (
               <div className="p-8 text-center bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
                 <p className="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
-                  No red flags identified yet. When threats of arrest, fake police claims, or urgent credential requests are heard, they appear here mid-call.
+                  {t.redFlags.emptyText}
                 </p>
               </div>
             ) : (
