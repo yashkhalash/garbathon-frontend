@@ -136,4 +136,46 @@ test.describe('Suraksha AI — Comprehensive E2E Playwright Test Suite', () => {
     await page.locator('nav button:has-text("લાઈવ"), nav button:has-text("Live")').first().click();
     await expect(page.locator('text=Live Microphone Scam Assistant').first()).toBeVisible({ timeout: 10000 });
   });
+
+  test('5 Unique New Features for GenZ & Older Persons with animated NEW badges', async ({ page }) => {
+    // 1. Check Navbar 5 New Tools button with NEW badge
+    const fiveToolsBtn = page.locator('[data-testid="five-new-tools-nav-btn"]');
+    await expect(fiveToolsBtn).toBeVisible();
+    await expect(fiveToolsBtn.locator('text="NEW"')).toBeVisible();
+
+    // 2. Feature 1: UPI Reverse QR & Payment Scam Shield (GenZ)
+    const upiCardBtn = page.locator('[data-testid="open-feature-upi-btn"]');
+    await expect(upiCardBtn).toBeVisible();
+    await upiCardBtn.click();
+    await expect(page.locator('[data-testid="upi-shield-modal"]')).toBeVisible();
+    await page.locator('[data-testid="inspect-upi-request-btn"]').click();
+    await page.locator('[data-testid="close-upi-modal-btn"]').click({ force: true });
+    await expect(page.locator('[data-testid="upi-shield-modal"]')).not.toBeVisible();
+
+    // 3. Feature 2: Fake Online Shopping & Malicious APK Scanner (GenZ)
+    const shoppingCardBtn = page.locator('[data-testid="open-feature-shopping-btn"]');
+    await shoppingCardBtn.click();
+    await expect(page.locator('[data-testid="shopping-scanner-modal"]')).toBeVisible();
+    await page.locator('[data-testid="close-shopping-modal-btn"]').click({ force: true });
+
+    // 4. Feature 3: Senior Pension & High-Yield Investment Shield (Older Persons)
+    const investCardBtn = page.locator('[data-testid="open-feature-investment-btn"]');
+    await investCardBtn.click();
+    await expect(page.locator('[data-testid="senior-investment-modal"]')).toBeVisible();
+    await page.locator('[data-testid="close-investment-modal-btn"]').click({ force: true });
+
+    // 5. Feature 4: Jeevan Pramaan Life Certificate Scam Guard (Older Persons)
+    const pensionCardBtn = page.locator('[data-testid="open-feature-pension-btn"]');
+    await pensionCardBtn.click();
+    await expect(page.locator('[data-testid="pension-guard-modal"]')).toBeVisible();
+    await page.locator('[data-testid="close-pension-modal-btn"]').click({ force: true });
+
+    // 6. Feature 5: Golden Hour Family Killswitch & Financial Freeze
+    const killswitchCardBtn = page.locator('[data-testid="open-feature-killswitch-btn"]');
+    await killswitchCardBtn.click();
+    await expect(page.locator('[data-testid="family-killswitch-modal"]')).toBeVisible();
+    await page.locator('button:has-text("HDFC")').click();
+    await page.locator('[data-testid="close-killswitch-modal-btn"]').click({ force: true });
+    await expect(page.locator('[data-testid="family-killswitch-modal"]')).not.toBeVisible();
+  });
 });

@@ -12,6 +12,7 @@ import { PrivacyNotice } from '../components/PrivacyNotice';
 import { IndiaScamAnalytics } from '../components/IndiaScamAnalytics';
 import { AnimatedHowItWorks } from '../components/AnimatedHowItWorks';
 import { DashboardSkeleton } from '../components/DashboardSkeleton';
+import { NewFeaturesGrid } from '../components/features/NewFeaturesGrid';
 import {
   StructuredAIResponse,
   WarningLanguage,
@@ -430,6 +431,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ language, isDemoMode }) =>
 
       {/* Official Government Cybercrime Analytics (I4C & NCRB Demographics) */}
       <IndiaScamAnalytics language={language} />
+
+      {/* 5 Unique Features Suite with Animated NEW badges (GenZ & Older Persons) */}
+      <NewFeaturesGrid
+        language={language}
+        contactName={contactName}
+        relationship={relationship}
+      />
 
       {/* Chronological Timeline */}
       <AnalysisTimeline

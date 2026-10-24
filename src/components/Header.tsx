@@ -154,8 +154,31 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             </nav>
 
-            {/* 3. Right Action Tools: Aadhaar Vault + Theme + Mode + Language */}
-            <div className="flex items-center space-x-1.5 sm:space-x-3 flex-shrink-0">
+            {/* 3. Right Action Tools: 5 New Tools + Aadhaar Vault + Theme + Mode + Language */}
+            <div className="flex items-center space-x-1.5 sm:space-x-2.5 flex-shrink-0">
+              {/* 5 NEW AI TOOLS QUICK SHORTCUT */}
+              <button
+                onClick={() => {
+                  setCurrentTab('recordings');
+                  setTimeout(() => {
+                    document.getElementById('new-features-section')?.scrollIntoView({ behavior: 'smooth' });
+                  }, 80);
+                }}
+                data-testid="five-new-tools-nav-btn"
+                className={`relative group flex items-center space-x-1.5 px-2.5 sm:px-3 py-2 rounded-xl border text-xs font-black transition-all hover:scale-[1.03] active:scale-95 shadow-md ${
+                  isSenior
+                    ? 'bg-indigo-500/25 border-indigo-400 text-indigo-200'
+                    : 'bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-blue-500/20 border-indigo-400/50 hover:border-indigo-300 text-indigo-200'
+                }`}
+                title="Explore 5 New AI Fraud Protection Tools for GenZ & Older Persons"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-yellow-300 group-hover:rotate-12 transition-transform" />
+                <span className="whitespace-nowrap font-black hidden lg:inline">5 New Tools</span>
+                <span className="text-[9px] sm:text-[10px] font-black uppercase px-1.5 py-0.5 rounded-full bg-indigo-500 text-white animate-pulse tracking-wide">
+                  NEW
+                </span>
+              </button>
+
               {/* UNIQUE AADHAAR VAULT (Pulsing Glow & Clear Text) */}
               <button
                 onClick={() => setIsVaultOpen(true)}
