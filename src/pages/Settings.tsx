@@ -43,7 +43,7 @@ export const Settings: React.FC<SettingsProps> = ({ language, setLanguage }) => 
 
   // Gemini Model & Key States
   const [geminiSettings, setGeminiSettings] = useState<GeminiSettings | null>(null);
-  const [selectedModel, setSelectedModel] = useState<string>('gemini-2.5-flash');
+  const [selectedModel, setSelectedModel] = useState<string>('gemini-2.5-flash-lite');
   const [apiKeyInput, setApiKeyInput] = useState<string>('');
   const [showApiKey, setShowApiKey] = useState<boolean>(false);
   const [isTestingKey, setIsTestingKey] = useState<boolean>(false);
@@ -100,6 +100,9 @@ export const Settings: React.FC<SettingsProps> = ({ language, setLanguage }) => 
     try {
       const updated = await updateGeminiSettings(selectedModel, apiKeyInput.trim());
       setGeminiSettings(updated);
+      if (updated.model) {
+        setSelectedModel(updated.model);
+      }
       setApiKeyInput('');
       if (updated.status === 'active') {
         setFeedbackMsg({
@@ -157,13 +160,13 @@ export const Settings: React.FC<SettingsProps> = ({ language, setLanguage }) => 
       const targetKey = apiKeyInput.trim() ? apiKeyInput.trim() : undefined;
       const res = await testGeminiKey(targetKey, selectedModel);
       setTestResult(res);
-      if (geminiSettings) {
-        setGeminiSettings({
-          ...geminiSettings,
-          status: res.status as any,
-          status_message: res.status_message,
-          latency_ms: res.latency_ms,
-        });
+      if (res.model) {
+        setSelectedModel(res.model);
+      }
+      const updatedSettings = await fetchGeminiSettings();
+      setGeminiSettings(updatedSettings);
+      if (updatedSettings.model) {
+        setSelectedModel(updatedSettings.model);
       }
     } catch (err: any) {
       setTestResult({
@@ -211,33 +214,33 @@ export const Settings: React.FC<SettingsProps> = ({ language, setLanguage }) => 
         {/* Model Selection Options */}
         <div className="space-y-3">
           <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-            Select Model (Gemini 2.5 Flash is recommended for real-time scam audio streams):
+            Select Model (Gemini 2.5 Flash Lite is recommended for high free tier quota &amp; sub-second scam audio analysis):
           </label>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {(geminiSettings?.supported_models || [
               {
-                id: 'gemini-2.5-flash',
-                name: 'Gemini 2.5 Flash',
-                description: 'Recommended: Ultra-fast native audio understanding, lowest latency, high rate limits.',
+                id: 'gemini-2.5-flash-lite',
+                name: 'Gemini 2.5 Flash Lite',
+                description: 'Recommended: High Free Quota, Ultra-Fast Latency, Zero 429 Rate Limits on Google AI Studio Free Tier.',
                 is_recommended: true,
               },
               {
-                id: 'gemini-2.0-flash',
-                name: 'Gemini 2.0 Flash',
-                description: 'Fast multimodal reasoning model.',
+                id: 'gemini-flash-lite-latest',
+                name: 'Gemini Flash Lite (Latest)',
+                description: 'Always points to Google\'s latest stable Flash Lite multimodal engine with generous quota.',
                 is_recommended: false,
               },
               {
-                id: 'gemini-1.5-flash',
-                name: 'Gemini 1.5 Flash',
-                description: 'Standard lightweight audio model.',
+                id: 'gemini-2.5-flash',
+                name: 'Gemini 2.5 Flash',
+                description: 'Standard Flash model. Note: Free tier is strictly limited to 20 requests/day by Google (causes 429 when quota is reached).',
                 is_recommended: false,
               },
               {
                 id: 'gemini-2.5-pro',
                 name: 'Gemini 2.5 Pro',
-                description: 'Deep thinking model for complex multi-party financial extortion calls.',
+                description: 'Advanced reasoning model for complex financial fraud forensics.',
                 is_recommended: false,
               },
             ]).map((m) => {
@@ -354,6 +357,18 @@ export const Settings: React.FC<SettingsProps> = ({ language, setLanguage }) => 
                   </span>
                 )}
               </p>
+
+              {geminiSettings?.status === 'rate_limited' && (
+                <div className="mt-3">
+                  <button
+                    onClick={() => handleModelChange('gemini-2.5-flash-lite')}
+                    className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm transition-all"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-yellow-300" />
+                    <span>Auto-Fix: Switch to Gemini 2.5 Flash Lite (High Free Quota)</span>
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Delete / Clear Custom Key button */}
@@ -454,6 +469,18 @@ export const Settings: React.FC<SettingsProps> = ({ language, setLanguage }) => 
               <p className="text-xs mt-1 leading-relaxed font-medium">
                 {testResult.status_message}
               </p>
+
+              {testResult.status === 'rate_limited' && (
+                <div className="mt-3">
+                  <button
+                    onClick={() => handleModelChange('gemini-2.5-flash-lite')}
+                    className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm transition-all"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-yellow-300" />
+                    <span>Auto-Fix: Switch to Gemini 2.5 Flash Lite (High Free Quota)</span>
+                  </button>
+                </div>
+              )}
             </div>
           )}
 

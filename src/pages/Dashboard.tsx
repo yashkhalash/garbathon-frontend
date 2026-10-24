@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { AadhaarVaultBanner } from "../components/AadhaarVaultBanner";
-import { HackathonParametersBar } from '../components/HackathonParametersBar';
 import { StepGuide } from '../components/StepGuide';
 import { AudioUploader } from '../components/AudioUploader';
 import { AudioPlayer } from '../components/AudioPlayer';
@@ -95,6 +94,22 @@ export const Dashboard: React.FC<DashboardProps> = ({ language, isDemoMode }) =>
   const activePresetIdRef = useRef(selectedPresetId);
   activePresetIdRef.current = selectedPresetId;
 
+  const latestAnalysisRef = useRef<{
+    riskLevel: RiskLevel;
+    riskScore: number;
+    summary: string;
+    redFlags: RedFlag[];
+    recommendedActions: string[];
+    warningText: string;
+  }>({
+    riskLevel: 'safe',
+    riskScore: 0,
+    summary: '',
+    redFlags: [],
+    recommendedActions: [],
+    warningText: '',
+  });
+
   // Handle Preset or File Selection
   const handleAudioSelected = async (file: File | null, presetUrl?: string, preset?: DemoCallPreset) => {
     soundManager.stopAll();
@@ -108,6 +123,14 @@ export const Dashboard: React.FC<DashboardProps> = ({ language, isDemoMode }) =>
     setShouldWarn(false);
     setContextSummary('');
     setCurrentStep(1);
+    latestAnalysisRef.current = {
+      riskLevel: 'safe',
+      riskScore: 0,
+      summary: '',
+      redFlags: [],
+      recommendedActions: [],
+      warningText: '',
+    };
 
     if (preset) {
       setAudioUrl(preset.audioUrl);
@@ -202,6 +225,15 @@ export const Dashboard: React.FC<DashboardProps> = ({ language, isDemoMode }) =>
         setRecommendedActions(response.recommended_actions);
       }
 
+      latestAnalysisRef.current = {
+        riskLevel: response.risk_level,
+        riskScore: response.risk_score,
+        summary: response.summary,
+        redFlags: response.red_flags || [],
+        recommendedActions: response.recommended_actions || [],
+        warningText: response.warning_text || '',
+      };
+
       if (response.should_warn) {
         setCurrentStep(3);
       }
@@ -272,14 +304,37 @@ export const Dashboard: React.FC<DashboardProps> = ({ language, isDemoMode }) =>
     setIsPlaying(false);
     setIsProcessingChunk(false);
 
+    const latest = latestAnalysisRef.current;
+    const finalScore = latest.riskScore > 0 ? latest.riskScore : riskScore;
+    const finalLevel = latest.riskScore > 0 ? latest.riskLevel : riskLevel;
+    const finalSummary = (latest.summary && !latest.summary.startsWith('Ready') && !latest.summary.startsWith('Splitting'))
+      ? latest.summary
+      : summary;
+    const finalFlags = latest.redFlags.length > 0 ? latest.redFlags : redFlags;
+    const currentPreset = DEMO_PRESETS.find(p => p.id === selectedPresetId);
+    const title = currentPreset ? currentPreset.name : (selectedFile ? selectedFile.name : 'Analyzed Audio Call');
+
     saveAnalysisSummary({
       timestamp: Date.now(),
+      callTitle: title,
+      callerTag: currentPreset?.name || 'Inbound Call',
+      spamTier: (currentPreset?.spamTier as any) || (finalScore >= 75 ? 'definite_spam' : (finalScore >= 35 ? 'partially_spam' : 'no_spam')),
       durationSeconds: Math.round(duration),
-      riskLevel: riskLevel,
-      riskScore: riskScore,
-      summary: summary,
-      redFlagCount: redFlags.length,
-      categories: Array.from(new Set(redFlags.map((r) => r.category))),
+      riskLevel: finalLevel,
+      riskScore: finalScore,
+      verdictLabel: finalScore >= 75 ? '🔴 Definite Scam (પૂર્ણ છેતરપિંડી)' : (finalScore >= 35 ? '🟡 Suspicious Call (શંકાસ્પદ)' : '🟢 Safe Routine Call (સુરક્ષિત)'),
+      summary: finalSummary,
+      redFlagCount: finalFlags.length,
+      categories: Array.from(new Set(finalFlags.map((r) => r.category))),
+      redFlagsList: finalFlags.map(f => ({
+        category: f.category,
+        evidence: f.evidence,
+        reason: f.reason,
+        severity: f.severity,
+      })),
+      recommendedAction: (latest.recommendedActions && latest.recommendedActions[0]) || recommendedActions[0] || 'Verify caller claims independently.',
+      warningText: latest.warningText || warningText,
+      language: language,
     });
 
     setTimelineEvents((prev) => [
@@ -287,8 +342,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ language, isDemoMode }) =>
       {
         id: `evt_finish_${Date.now()}`,
         timestampSeconds: Math.round(duration),
-        label: `Call finished. Final risk assessment: ${riskLevel.toUpperCase()} (${riskScore}/100)`,
-        severity: riskLevel === 'critical' || riskLevel === 'high' ? 'critical' : 'info',
+        label: `Call finished. Final risk assessment: ${finalLevel.toUpperCase()} (${finalScore}/100)`,
+        severity: finalLevel === 'critical' || finalLevel === 'high' ? 'critical' : 'info',
         type: 'action',
       },
     ]);
@@ -322,11 +377,6 @@ export const Dashboard: React.FC<DashboardProps> = ({ language, isDemoMode }) =>
 
   return (
     <div className="space-y-6">
-      {/* Hackathon Evaluation Parameters Bar (Image-Wise All 6 Parameters Given 100/100) */}
-      <div id="hackathon-parameters-bar">
-        <HackathonParametersBar />
-      </div>
-
       {/* Unique Feature: Aadhaar Vault Banner */}
       <AadhaarVaultBanner language={language} />
 

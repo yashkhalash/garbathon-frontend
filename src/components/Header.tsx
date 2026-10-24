@@ -11,7 +11,6 @@ import {
   History,
   Settings as SettingsIcon,
   Disc,
-  Flag,
 } from 'lucide-react';
 import { WarningLanguage } from '../types/analysis';
 import { ThemeMode } from '../types/theme';
@@ -377,29 +376,6 @@ export const Header: React.FC<HeaderProps> = ({
                 <span>5 New Tools</span>
                 <span className="text-[9px] font-black uppercase px-1.5 py-0.5 rounded-full bg-indigo-600 text-white tracking-wide">
                   NEW
-                </span>
-              </button>
-
-              {/* EVALUATION PARAMETERS (100/100) QUICK SHORTCUT */}
-              <button
-                onClick={() => {
-                  setCurrentTab('recordings');
-                  setTimeout(() => {
-                    document.getElementById('hackathon-parameters-bar')?.scrollIntoView({ behavior: 'smooth' });
-                  }, 80);
-                }}
-                data-testid="parameters-nav-btn"
-                className={`group flex items-center space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border text-xs font-black transition-all hover:scale-[1.02] active:scale-95 shadow-sm whitespace-nowrap ${
-                  isSenior
-                    ? 'bg-white border-amber-400 text-slate-950 hover:bg-amber-100'
-                    : 'bg-emerald-500/15 border-emerald-400/40 hover:border-emerald-300 text-emerald-200 hover:bg-emerald-500/25'
-                }`}
-                title="View All 6 Evaluation Parameters (100/100)"
-              >
-                <Flag className={`w-3.5 h-3.5 ${isSenior ? 'text-amber-700' : 'text-emerald-400'} group-hover:rotate-6 transition-transform flex-shrink-0`} />
-                <span className="hidden sm:inline">Parameters</span>
-                <span className="text-[9px] font-black uppercase px-1.5 py-0.5 rounded-full bg-emerald-500 text-slate-950 tracking-wide font-black">
-                  100/100
                 </span>
               </button>
 
