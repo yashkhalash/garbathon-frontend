@@ -134,7 +134,7 @@ test.describe('Suraksha AI — Comprehensive E2E Playwright Test Suite', () => {
 
     // Verify Navigation works across tabs
     await page.locator('nav button:has-text("લાઈવ"), nav button:has-text("Live")').first().click();
-    await expect(page.locator('text=Live Microphone Scam Assistant').first()).toBeVisible({ timeout: 10000 });
+    await expect(page.locator('text=લાઈવ માઈક્રોફોન').first()).toBeVisible({ timeout: 10000 });
   });
 
   test('5 Unique New Features for GenZ & Older Persons with animated NEW badges', async ({ page }) => {
@@ -244,5 +244,41 @@ test.describe('Suraksha AI — Comprehensive E2E Playwright Test Suite', () => {
     // 5. Verify Add / Update Input Field
     const apiKeyInput = page.locator('[data-testid="gemini-api-key-input"]');
     await expect(apiKeyInput).toBeVisible();
+  });
+
+  test('Responsive Multilingual UI (Gujarati, Hindi, English) & Natural Female Voice Explainer Buttons', async ({ page }) => {
+    // 1. Verify Gujarati Content
+    await page.locator('[data-testid="language-select"]').selectOption('gu');
+    await expect(page.locator('text=સરળ ઉપયોગ પદ્ધતિ (૪ સ્ટેપ)').first()).toBeVisible();
+    await expect(page.locator('text=૫ અજોડ AI સુરક્ષા ટૂલ્સ').first()).toBeVisible();
+    await expect(page.locator('text=ભારતમાં મોબાઈલ સ્કેમ્સ: કોણ સૌથી વધુ ભોગ બને છે?').first()).toBeVisible();
+
+    // 2. Click Voice Explainer Button for Aadhaar Vault in Gujarati
+    const vaultVoiceBtn = page.locator('[data-testid="voice-explain-aadhaar-vault"]');
+    await expect(vaultVoiceBtn).toBeVisible();
+    await vaultVoiceBtn.click();
+    await expect(page.locator('text=અવાજ રોકો').first()).toBeVisible();
+    // Stop voice
+    await page.locator('text=અવાજ રોકો').first().click();
+
+    // 3. Switch to Hindi and verify whole page changes
+    await page.locator('[data-testid="language-select"]').selectOption('hi');
+    await expect(page.locator('text=सरल 4-चरणीय सुरक्षा गाइड').first()).toBeVisible();
+    await expect(page.locator('text=5 अनूठे AI सुरक्षा टूल्स').first()).toBeVisible();
+    await expect(page.locator('text=महिला स्वर में समझें').first()).toBeVisible();
+
+    // 4. Switch to English and verify whole page changes
+    await page.locator('[data-testid="language-select"]').selectOption('en');
+    await expect(page.locator('text=How Suraksha AI Works (4 Simple Steps)').first()).toBeVisible();
+    await expect(page.locator('text=Explain with Voice').first()).toBeVisible();
+
+    // 5. Test Mobile Responsiveness (Viewport 375x667)
+    await page.setViewportSize({ width: 375, height: 667 });
+    await expect(page.locator('text=Suraksha AI').first()).toBeVisible();
+    const mobileVoiceBtn = page.locator('[data-testid="voice-explain-hero"]');
+    await expect(mobileVoiceBtn).toBeVisible();
+
+    // Reset back to desktop viewport
+    await page.setViewportSize({ width: 1280, height: 800 });
   });
 });

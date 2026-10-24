@@ -3,6 +3,7 @@ import { Lock, ArrowRight } from 'lucide-react';
 import { AadhaarVaultModal } from './AadhaarVaultModal';
 import { WarningLanguage } from '../types/analysis';
 import { TRANSLATIONS } from '../utils/translations';
+import { VoiceExplainerButton } from './VoiceExplainerButton';
 
 interface AadhaarVaultBannerProps {
   language: WarningLanguage;
@@ -11,6 +12,7 @@ interface AadhaarVaultBannerProps {
 export const AadhaarVaultBanner: React.FC<AadhaarVaultBannerProps> = ({ language }) => {
   const [isOpen, setIsOpen] = useState(false);
   const t = TRANSLATIONS[language]?.vault || TRANSLATIONS.gu.vault;
+  const explainerText = TRANSLATIONS[language]?.voiceExplainer?.aadhaarVault || TRANSLATIONS.gu.voiceExplainer.aadhaarVault;
 
   return (
     <>
@@ -44,13 +46,22 @@ export const AadhaarVaultBanner: React.FC<AadhaarVaultBannerProps> = ({ language
             </div>
           </div>
 
-          <button
-            onClick={() => setIsOpen(true)}
-            className="w-full sm:w-auto flex items-center justify-center space-x-2 px-5 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-rose-600 hover:from-amber-600 hover:to-rose-700 text-white font-black text-xs shadow-lg transition-all active:scale-95 flex-shrink-0"
-          >
-            <span>{t.launchButton}</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
+          <div className="w-full sm:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-shrink-0">
+            <VoiceExplainerButton
+              textToSpeak={explainerText}
+              language={language}
+              variant="amber"
+              size="md"
+              testId="voice-explain-aadhaar-vault"
+            />
+            <button
+              onClick={() => setIsOpen(true)}
+              className="flex items-center justify-center space-x-2 px-5 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-rose-600 hover:from-amber-600 hover:to-rose-700 text-white font-black text-xs shadow-lg transition-all active:scale-95 whitespace-nowrap"
+            >
+              <span>{t.launchButton}</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </div>
 

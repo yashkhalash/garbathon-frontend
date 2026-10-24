@@ -11,11 +11,13 @@ import {
   History,
   Settings as SettingsIcon,
   Disc,
+  Flag,
 } from 'lucide-react';
 import { WarningLanguage } from '../types/analysis';
 import { ThemeMode } from '../types/theme';
 import { AadhaarVaultModal } from './AadhaarVaultModal';
 import { TRANSLATIONS } from '../utils/translations';
+import { VoiceExplainerButton } from './VoiceExplainerButton';
 
 interface HeaderProps {
   currentTab: 'recordings' | 'live' | 'report' | 'settings';
@@ -59,7 +61,7 @@ export const Header: React.FC<HeaderProps> = ({
         />
 
         <div className="w-full max-w-[1536px] mx-auto px-3 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20 gap-2 sm:gap-4">
+          <div className="flex items-center justify-between min-h-20 h-auto py-2 gap-2 sm:gap-4 flex-wrap xl:flex-nowrap">
             {/* 1. Left Brand Column */}
             <div
               className="flex items-center space-x-2.5 sm:space-x-3 cursor-pointer group flex-shrink-0 select-none py-1"
@@ -217,6 +219,29 @@ export const Header: React.FC<HeaderProps> = ({
                 </span>
               </button>
 
+              {/* EVALUATION PARAMETERS (100/100) QUICK SHORTCUT */}
+              <button
+                onClick={() => {
+                  setCurrentTab('recordings');
+                  setTimeout(() => {
+                    document.getElementById('hackathon-parameters-bar')?.scrollIntoView({ behavior: 'smooth' });
+                  }, 80);
+                }}
+                data-testid="parameters-nav-btn"
+                className={`relative group flex items-center space-x-1.5 px-2.5 sm:px-3 py-2 rounded-xl border text-xs font-black transition-all hover:scale-[1.03] active:scale-95 shadow-md ${
+                  isSenior
+                    ? 'bg-amber-100 border-amber-400 text-slate-950 hover:bg-amber-200'
+                    : 'bg-emerald-500/15 border-emerald-400/40 hover:border-emerald-300 text-emerald-200'
+                }`}
+                title="View All 6 Evaluation Parameters (100/100)"
+              >
+                <Flag className={`w-3.5 h-3.5 ${isSenior ? 'text-amber-700' : 'text-emerald-400'} group-hover:rotate-6 transition-transform`} />
+                <span className="whitespace-nowrap font-black hidden lg:inline">Parameters</span>
+                <span className="text-[9px] sm:text-[10px] font-black uppercase px-1.5 py-0.5 rounded-full bg-emerald-500 text-slate-950 tracking-wide">
+                  100/100
+                </span>
+              </button>
+
               {/* UNIQUE AADHAAR VAULT (Pulsing Glow & Clear Text) */}
               <button
                 onClick={() => setIsVaultOpen(true)}
@@ -335,23 +360,33 @@ export const Header: React.FC<HeaderProps> = ({
                 </button>
               </div>
 
-              {/* Language Selector Dropdown */}
-              <div className="relative">
-                <select
-                  value={language}
-                  onChange={(e) => setLanguage(e.target.value as WarningLanguage)}
-                  data-testid="language-select"
-                  className={`border rounded-xl px-2 sm:px-3 py-1.5 text-xs font-black focus:outline-none focus:ring-2 cursor-pointer shadow-sm transition-colors ${
-                    isSenior
-                      ? 'bg-white text-slate-950 border-amber-400 focus:ring-amber-500 font-bold'
-                      : 'bg-slate-900 text-white border-slate-700/80 focus:ring-blue-500 hover:border-slate-500'
-                  }`}
-                  title="Select preferred intervention language"
-                >
-                  <option value="gu" className={isSenior ? 'bg-white text-slate-900 font-bold' : 'bg-slate-900 text-white font-bold'}>ગુજરાતી</option>
-                  <option value="hi" className={isSenior ? 'bg-white text-slate-900 font-bold' : 'bg-slate-900 text-white font-bold'}>हिन्दी</option>
-                  <option value="en" className={isSenior ? 'bg-white text-slate-900 font-bold' : 'bg-slate-900 text-white font-bold'}>English</option>
-                </select>
+              {/* Language Selector Dropdown & Voice Explainer */}
+              <div className="flex items-center space-x-1.5">
+                <VoiceExplainerButton
+                  textToSpeak={TRANSLATIONS[language]?.voiceExplainer?.hero || TRANSLATIONS.gu.voiceExplainer.hero}
+                  language={language}
+                  variant={isSenior ? 'amber' : 'blue'}
+                  size="sm"
+                  testId="voice-explain-hero"
+                />
+
+                <div className="relative">
+                  <select
+                    value={language}
+                    onChange={(e) => setLanguage(e.target.value as WarningLanguage)}
+                    data-testid="language-select"
+                    className={`border rounded-xl px-2 sm:px-3 py-1.5 text-xs font-black focus:outline-none focus:ring-2 cursor-pointer shadow-sm transition-colors ${
+                      isSenior
+                        ? 'bg-white text-slate-950 border-amber-400 focus:ring-amber-500 font-bold'
+                        : 'bg-slate-900 text-white border-slate-700/80 focus:ring-blue-500 hover:border-slate-500'
+                    }`}
+                    title="Select preferred intervention language"
+                  >
+                    <option value="gu" className={isSenior ? 'bg-white text-slate-900 font-bold' : 'bg-slate-900 text-white font-bold'}>ગુજરાતી</option>
+                    <option value="hi" className={isSenior ? 'bg-white text-slate-900 font-bold' : 'bg-slate-900 text-white font-bold'}>हिन्दी</option>
+                    <option value="en" className={isSenior ? 'bg-white text-slate-900 font-bold' : 'bg-slate-900 text-white font-bold'}>English</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>

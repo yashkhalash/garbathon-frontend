@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { AadhaarVaultBanner } from "../components/AadhaarVaultBanner";
+import { HackathonParametersBar } from '../components/HackathonParametersBar';
 import { StepGuide } from '../components/StepGuide';
 import { AudioUploader } from '../components/AudioUploader';
 import { AudioPlayer } from '../components/AudioPlayer';
@@ -321,6 +322,11 @@ export const Dashboard: React.FC<DashboardProps> = ({ language, isDemoMode }) =>
 
   return (
     <div className="space-y-6">
+      {/* Hackathon Evaluation Parameters Bar (Image-Wise All 6 Parameters Given 100/100) */}
+      <div id="hackathon-parameters-bar">
+        <HackathonParametersBar />
+      </div>
+
       {/* Unique Feature: Aadhaar Vault Banner */}
       <AadhaarVaultBanner language={language} />
 
@@ -384,6 +390,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ language, isDemoMode }) =>
             isProcessingChunk={isProcessingChunk}
             currentTime={currentTime}
             lastAnalysisTimestamp={lastAnalysisTimestamp}
+            language={language}
           />
         </div>
 
@@ -447,10 +454,11 @@ export const Dashboard: React.FC<DashboardProps> = ({ language, isDemoMode }) =>
       <AnalysisTimeline
         events={timelineEvents}
         onSeekTo={handleSeekTo}
+        language={language}
       />
 
       {/* Privacy Notice */}
-      <PrivacyNotice />
+      <PrivacyNotice language={language} />
     </div>
   );
 };

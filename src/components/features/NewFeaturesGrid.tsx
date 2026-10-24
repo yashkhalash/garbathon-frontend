@@ -14,6 +14,8 @@ import { ShoppingApkScannerModal } from './ShoppingApkScannerModal';
 import { SeniorInvestmentShieldModal } from './SeniorInvestmentShieldModal';
 import { DigitalLifeCertificateModal } from './DigitalLifeCertificateModal';
 import { FamilyKillswitchModal } from './FamilyKillswitchModal';
+import { VoiceExplainerButton } from '../VoiceExplainerButton';
+import { TRANSLATIONS } from '../../utils/translations';
 
 interface NewFeaturesGridProps {
   language: WarningLanguage;
@@ -242,6 +244,16 @@ export const NewFeaturesGrid: React.FC<NewFeaturesGridProps> = ({
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
               {t.subtitle}
             </p>
+          </div>
+
+          <div className="self-start sm:self-center flex-shrink-0">
+            <VoiceExplainerButton
+              textToSpeak={TRANSLATIONS[language]?.voiceExplainer?.newTools || TRANSLATIONS.gu.voiceExplainer.newTools}
+              language={language}
+              variant="emerald"
+              size="md"
+              testId="voice-explain-new-tools"
+            />
           </div>
         </div>
 

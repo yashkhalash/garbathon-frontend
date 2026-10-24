@@ -84,6 +84,47 @@ export interface TranslationDictionary {
     evidenceTitle: string;
     emptyText: string;
   };
+  timeline: {
+    title: string;
+    eventsRecorded: string;
+    emptyText: string;
+    jumpToAudio: string;
+  };
+  privacy: {
+    title: string;
+    desc: string;
+    clearBtn: string;
+    bullet1: string;
+    bullet2: string;
+    bullet3: string;
+  };
+  liveAudio: {
+    title: string;
+    subtitle: string;
+    noticeTitle: string;
+    noticeDesc: string;
+    startBtn: string;
+    stopBtn: string;
+    listeningStatus: string;
+    readyStatus: string;
+    micDenied: string;
+  };
+  analysisReport: {
+    title: string;
+    subtitle: string;
+    clearBtn: string;
+    emptyTitle: string;
+    emptyDesc: string;
+    riskPrefix: string;
+  };
+  voiceExplainer: {
+    hero: string;
+    howItWorks: string;
+    aadhaarVault: string;
+    analytics: string;
+    newTools: string;
+    testStudio: string;
+  };
 }
 
 export const TRANSLATIONS: Record<WarningLanguage, TranslationDictionary> = {
@@ -171,6 +212,47 @@ export const TRANSLATIONS: Record<WarningLanguage, TranslationDictionary> = {
       evidenceTitle: "કોલમાં સંભળાયેલ ચોક્કસ પુરાવો:",
       emptyText: "હજી સુધી કોઈ શંકાસ્પદ સંકેતો મળ્યા નથી. ધરપકડની ધમકી કે OTP માંગ સંભળાતા જ અહીં દેખાશે.",
     },
+    timeline: {
+      title: "સમયરેખા પ્રમાણે વિશ્લેષણ ઇતિહાસ",
+      eventsRecorded: "ઘટનાઓ નોંધાઈ",
+      emptyText: "હજી સુધી કોઈ સમયરેખા ઇવેન્ટ નોંધાઈ નથી. ઉપરથી કૉલ પસંદ કરીને વિશ્લેષણ શરૂ કરો.",
+      jumpToAudio: "આ સમયે સાંભળો",
+    },
+    privacy: {
+      title: "ગોપનીયતા અને ડેટા સુરક્ષા ગેરંટી",
+      desc: "સુરક્ષા AI સંપૂર્ણપણે શૂન્ય-જ્ઞાન (Zero-Knowledge) સિદ્ધાંત પર કાર્ય કરે છે. અવાજ ફક્ત મેમરીમાં સ્કેન થાય છે. તમારા ખાનગી પાસવર્ડ, ઓડિયો કે OTP ક્યારેય કોઈ ડેટાબેઝમાં સાચવવામાં આવતા નથી.",
+      clearBtn: "લોકલ લોગ્સ સાફ કરો",
+      bullet1: "મેમરી-આધારિત સ્ટ્રીમિંગ વિશ્લેષણ",
+      bullet2: "કોઈ બાયોમેટ્રિક કે વોઇસપ્રિન્ટ સંગ્રહ નહીં",
+      bullet3: "સલાહકાર સુરક્ષા કવચ (બિન-દંડાત્મક)",
+    },
+    liveAudio: {
+      title: "લાઈવ માઈક્રોફોન સ્કેમ સહાયક",
+      subtitle: "તમારા ફોન પર ચાલતા કોલને સ્પીકર પર રાખીને આ માઈક પાસે રાખો જેથી AI સીધું સ્કેન કરી શકે.",
+      noticeTitle: "લાઈવ માઈક્રોફોન પારદર્શિતા સૂચના:",
+      noticeDesc: "બ્રાઉઝર સુરક્ષા નિયમો મુજબ સેલ્યુલર કોલ્સ સીધા ટેપ કરી શકાતા નથી. તેથી રિયલ-ટાઇમ ચેતવણી માટે કોલરને સ્પીકરફોન પર રાખી માઈક્રોફોનની નજીક રાખો.",
+      startBtn: "લાઈવ સ્કેનિંગ શરૂ કરો",
+      stopBtn: "લાઈવ સ્કેનિંગ બંધ કરો",
+      listeningStatus: "લાઈવ વાતચીત સાંભળી રહ્યું છે...",
+      readyStatus: "લાઈવ મોનિટરિંગ માટે તૈયાર",
+      micDenied: "માઈક્રોફોનની મંજૂરી નકારાઈ છે. કૃપા કરીને બ્રાઉઝરમાં પરવાનગી આપો.",
+    },
+    analysisReport: {
+      title: "વિશ્લેષણ ઇતિહાસ અને સુરક્ષા લૉગ્સ",
+      subtitle: "અગાઉના તમામ કોલ મૂલ્યાંકનનો ગોપનીય ઓડિટ ટ્રેઇલ. કોઈ મૂળ અવાજ સાચવવામાં આવતો નથી.",
+      clearBtn: "બધા લૉગ્સ સાફ કરો",
+      emptyTitle: "હજી સુધી કોઈ ઇતિહાસ નથી",
+      emptyDesc: "કોઈપણ સ્કેમ કોલ તપાસો અથવા લાઈવ માઈક સત્ર ચલાવો જેથી અહીં લૉગ્સ દેખાશે.",
+      riskPrefix: "જોખમ મૂલ્યાંકન",
+    },
+    voiceExplainer: {
+      hero: "નમસ્તે! સુરક્ષા AI ભારતના નાગરિકો અને વડીલોને ડિજિટલ અરેસ્ટ, બેંક કેવાયસી અને ઓટીપી ચોરીથી બચાવવા માટે રચાયેલ છે. આ ટૂલ ગૂગલ જેમિની નેટિવ ઓડિયો મોડેલ દ્વારા કોલ ચાલુ હોય ત્યારે જ મહિલા અવાજમાં ચેતવણી આપે છે.",
+      howItWorks: "સુરક્ષા AI નો ઉપયોગ કરવો ખૂબ જ સરળ છે. પ્રથમ કોલ પસંદ કરો, બીજું વિશ્લેષણ શરૂ કરો. જેમિની AI પાંચ સેકન્ડમાં અવાજ સ્કેન કરશે, અને જો કોઈ ધમકી જણાશે તો તરત કુદરતી મહિલા અવાજમાં ચેતવણી મળશે.",
+      aadhaarVault: "આધાર બાયોમેટ્રિક ફ્રીઝ વૉલ્ટ ડિજિટલ અરેસ્ટ સ્કેમર્સ સામે અંતિમ રક્ષણ આપે છે. આ ફીચર તમારા આધાર બાયોમેટ્રિક્સને સર્વર સ્તરે ફ્રીઝ કરી દે છે જેથી સ્કેમર્સ કોઈ પણ નકલી ગુનો કે લોન કરી શકતા નથી.",
+      analytics: "ભારત સરકારના સાયબર ક્રાઈમ પોર્ટલ ૧૯૩૦ મુજબ, ભારતમાં દસ હજાર કરોડથી વધુ રૂપિયાની છેતરપિંડી થઈ છે, જેમાં સૌથી વધુ છેતરાતા જૂથ વરિષ્ઠ નાગરિકો અને જેન-ઝી યુવાનો છે. સુરક્ષા AI આ સમસ્યાનું સંપૂર્ણ નિવારણ લાવે છે.",
+      newTools: "અહીં પાંચ નવા AI ટૂલ્સ ઉપલબ્ધ છે: યુપીઆઈ રિવર્સ ક્યુઆર શિલ્ડ, નકલી શોપિંગ લિંક સ્કેનર, વરિષ્ઠ નાગરિક રોકાણ શિલ્ડ, જીવન પ્રમાણપત્ર ગાર્ડ અને ગોલ્ડન અવર ફેમિલી કિલ-સ્વિચ.",
+      testStudio: "આ ટેસ્ટ સ્ટુડિયોમાં તમે ડિજિટલ અરેસ્ટ, શંકાસ્પદ લોન અથવા સ્વિગી ડિલિવરી જેવા ટેક્સ્ટ મેસેજ એક-ક્લિકમાં કોપી અને પેસ્ટ કરીને ચકાસી શકો છો કે તે સ્કેમ છે કે સલામત.",
+    },
   },
 
   hi: {
@@ -257,6 +339,47 @@ export const TRANSLATIONS: Record<WarningLanguage, TranslationDictionary> = {
       evidenceTitle: "कॉल में सुना गया सटीक सबूत:",
       emptyText: "अभी तक कोई संदिग्ध संकेत नहीं मिले। गिरफ्तारी की धमकी या OTP मांग सुनते ही यहाँ प्रदर्शित होगा।",
     },
+    timeline: {
+      title: "समयरेखा अनुसार विश्लेषण इतिहास",
+      eventsRecorded: "घटनाएं दर्ज",
+      emptyText: "अभी तक कोई टाइमलाइन इवेंट दर्ज नहीं हुआ है। ऊपर से कॉल चुनकर प्ले करें।",
+      jumpToAudio: "इस समय सुनें",
+    },
+    privacy: {
+      title: "गोपनीयता एवं डेटा सुरक्षा गारंटी",
+      desc: "सुरक्षा AI पूरी तरह शून्य-ज्ञान (Zero-Knowledge) सिद्धांत पर काम करता है। ऑडियो केवल मेमोरी में स्कैन होता है। आपकी निजी आवाज, पासवर्ड या OTP कभी किसी डेटाबेस में स्टोर नहीं होते।",
+      clearBtn: "लोकल लॉग साफ़ करें",
+      bullet1: "मेमोरी-आधारित रियल-टाइम प्रोसेसिंग",
+      bullet2: "कोई बायोमेट्रिक या आवाज का डेटा सुरक्षित नहीं रखा जाता",
+      bullet3: "सलाहकारी सुरक्षा लेयर (अहानिकर)",
+    },
+    liveAudio: {
+      title: "लाइव माइक्रोफोन स्कैम सुरक्षा",
+      subtitle: "अपने आने वाले कॉल को स्पीकर पर रखकर इस माइक के पास रखें ताकि AI सीधे विश्लेषण कर सके।",
+      noticeTitle: "लाइव माइक्रोफोन पारदर्शिता सूचना:",
+      noticeDesc: "ब्राउज़र सुरक्षा के कारण सीधे फोन कॉल टैप नहीं किए जा सकते। रीयल-टाइम सुरक्षा के लिए कॉलर को स्पीकरफोन पर रखें।",
+      startBtn: "लाइव स्कैनिंग शुरू करें",
+      stopBtn: "लाइव स्कैनिंग रोकें",
+      listeningStatus: "लाइव बातचीत सुन रहा है...",
+      readyStatus: "लाइव निगरानी के लिए तैयार",
+      micDenied: "माइक्रोफोन की अनुमति अस्वीकृत। कृपया ब्राउज़र में अनुमति दें।",
+    },
+    analysisReport: {
+      title: "विश्लेषण इतिहास एवं सुरक्षा लॉग्स",
+      subtitle: "पूर्व कॉल मूल्यांकनों का गोपनीय ऑडिट ट्रेल। कोई भी मूल आवाज स्टोर नहीं की जाती।",
+      clearBtn: "सभी लॉग्स साफ़ करें",
+      emptyTitle: "अभी तक कोई इतिहास नहीं है",
+      emptyDesc: "किसी भी कॉल का विश्लेषण करें ताकि यहाँ लॉग्स प्रदर्शित हों।",
+      riskPrefix: "जोखिम मूल्यांकन",
+    },
+    voiceExplainer: {
+      hero: "नमस्ते! सुरक्षा AI भारतीय नागरिकों और वरिष्ठजनों को डिजिटल अरेस्ट, बैंक फ्रॉड और OTP ठगी से बचाने के लिए बनाया गया है। यह टूल गूगल जेमिनी नेटिव ऑडियो मॉडल द्वारा कॉल के दौरान ही स्वाभाविक महिला स्वर में चेतावनी देता है।",
+      howItWorks: "सुरक्षा AI का उपयोग बहुत आसान है। पहले कॉल चुनें, फिर विश्लेषण शुरू करें। जेमिनी AI ऑडियो को स्कैन करके धमकी मिलते ही तुरंत स्वाभाविक महिला आवाज में सुरक्षा चेतावनी देगा।",
+      aadhaarVault: "आधार बायोमेट्रिक फ्रीज वॉल्ट डिजिटल अरेस्ट जालसाजों से आपकी रक्षा करता है। यह आपके बायोमेट्रिक्स को सर्वर स्तर पर लॉक कर देता है ताकि कोई भी आपके नाम पर अवैध सिम या लोन न ले सके।",
+      analytics: "गृह मंत्रालय के साइबर पोर्टल 1930 के अनुसार, देश में दस हजार करोड़ रुपये से अधिक की ठगी हुई है। इसमें बुजुर्ग और युवा सबसे ज्यादा शिकार बनते हैं। सुरक्षा AI इसका शत-प्रतिशत समाधान प्रदान करता है।",
+      newTools: "यहाँ 5 नए AI टूल्स उपलब्ध हैं: UPI रिवर्स QR शील्ड, फेक शॉपिंग स्कैनर, वरिष्ठ नागरिक पेंशन शील्ड, जीवन प्रमाण सुरक्षा और गोल्डन आवर फैमिली किल-स्विच।",
+      testStudio: "इस टेस्ट स्टूडियो में आप किसी भी कॉल संवाद या संदेश को एक क्लिक में कॉपी-पेस्ट करके तुरंत जांच सकते हैं कि वह फ्रॉड है या सुरक्षित।",
+    },
   },
 
   en: {
@@ -342,6 +465,47 @@ export const TRANSLATIONS: Record<WarningLanguage, TranslationDictionary> = {
       title: "Red Flags Heard in Call",
       evidenceTitle: "Evidence Heard in Call:",
       emptyText: "No red flags identified yet. When threats of arrest or OTP requests are heard, they appear here mid-call.",
+    },
+    timeline: {
+      title: "Chronological Detection Timeline",
+      eventsRecorded: "Events Recorded",
+      emptyText: "No chronological timeline events logged yet. Select a call and start playback above.",
+      jumpToAudio: "Jump to audio",
+    },
+    privacy: {
+      title: "Privacy & Data Ethics Guarantee",
+      desc: "Suraksha AI operates on strict zero-knowledge principles. Audio chunks are analyzed in-memory to detect linguistic manipulation and threat patterns. Raw voice audio, passwords, or OTPs are never stored or logged into databases.",
+      clearBtn: "Clear Local Logs",
+      bullet1: "In-memory streaming chunks",
+      bullet2: "No biometric or voiceprint retention",
+      bullet3: "Advisory risk engine (non-punitive)",
+    },
+    liveAudio: {
+      title: "Live Microphone Scam Assistant",
+      subtitle: "Keep your incoming phone call on speakerphone near this microphone for real-time safety analysis.",
+      noticeTitle: "Live Microphone Mode Transparency Notice:",
+      noticeDesc: "Standard browser security prevents tapping directly into encrypted cellular calls. Keep caller on speakerphone near the microphone for real-time safety analysis.",
+      startBtn: "Start Live Listening",
+      stopBtn: "Stop Live Listening",
+      listeningStatus: "Listening live to conversation...",
+      readyStatus: "Ready to start live monitoring",
+      micDenied: "Microphone access denied or unavailable. Please grant microphone permissions in your browser.",
+    },
+    analysisReport: {
+      title: "Analysis History & Safety Logs",
+      subtitle: "Privacy-preserving audit trail of previous call assessments. No raw voice audio is saved.",
+      clearBtn: "Clear All Logs",
+      emptyTitle: "No Analysis History Yet",
+      emptyDesc: "Run an analysis on any scam recording or live microphone session to populate logs.",
+      riskPrefix: "Risk Assessment",
+    },
+    voiceExplainer: {
+      hero: "Welcome to Suraksha AI. This real-time assistant protects Indian citizens and senior citizens from digital arrest, banking KYC coercion, and OTP theft using Gemini Native Audio. Spoken warnings alert you mid-call in a natural female voice.",
+      howItWorks: "Using Suraksha AI is simple. First select a call recording, second start analysis. Gemini scans the audio in five-second slices and speaks a clear protective warning as soon as coercion is heard.",
+      aadhaarVault: "The Aadhaar Biometric Freeze Vault provides client-side protection against digital arrest extortionists by freezing iris and fingerprint authentication at UIDAI servers.",
+      analytics: "According to National Cybercrime portal 1930, over ten thousand crore rupees have been looted, with senior citizens and youth facing the largest impact. Suraksha AI resolves this directly.",
+      newTools: "Discover our 5 new AI protection tools: UPI reverse QR shield, fake shopping and APK scanner, senior investment shield, Jeevan Pramaan life certificate guard, and golden hour family killswitch.",
+      testStudio: "In this test studio, copy and load sample transcripts or paste any message to see instant AI classification, risk gauge scores, and extracted red flags.",
     },
   },
 };

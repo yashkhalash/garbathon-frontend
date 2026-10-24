@@ -12,6 +12,8 @@ import {
   Info,
 } from 'lucide-react';
 import { WarningLanguage } from '../types/analysis';
+import { VoiceExplainerButton } from './VoiceExplainerButton';
+import { TRANSLATIONS } from '../utils/translations';
 
 interface IndiaScamAnalyticsProps {
   language: WarningLanguage;
@@ -297,12 +299,22 @@ export const IndiaScamAnalytics: React.FC<IndiaScamAnalyticsProps> = ({ language
           </p>
         </div>
 
-        {/* Live Helpline 1930 Pill */}
-        <div className="flex items-center space-x-3 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-2xl border border-slate-200 dark:border-slate-700 flex-shrink-0">
-          <PhoneCall className="w-5 h-5 text-emerald-500 animate-bounce" />
-          <div>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">National Cybercrime Helpline</p>
-            <p className="text-base font-black text-navy-900 dark:text-white font-mono">Dial 1930 / cybercrime.gov.in</p>
+        {/* Live Helpline 1930 Pill & Voice Explainer */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 flex-shrink-0">
+          <VoiceExplainerButton
+            textToSpeak={TRANSLATIONS[language]?.voiceExplainer?.analytics || TRANSLATIONS.gu.voiceExplainer.analytics}
+            language={language}
+            variant="purple"
+            size="md"
+            testId="voice-explain-analytics"
+          />
+
+          <div className="flex items-center space-x-3 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-2xl border border-slate-200 dark:border-slate-700 flex-shrink-0">
+            <PhoneCall className="w-5 h-5 text-emerald-500 animate-bounce" />
+            <div>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">National Cybercrime Helpline</p>
+              <p className="text-base font-black text-navy-900 dark:text-white font-mono">Dial 1930 / cybercrime.gov.in</p>
+            </div>
           </div>
         </div>
       </div>

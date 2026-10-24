@@ -77,7 +77,7 @@ export const App: React.FC = () => {
         {currentTab === 'live' && (
           <LiveAudio language={language} isDemoMode={isDemoMode} />
         )}
-        {currentTab === 'report' && <AnalysisReport />}
+        {currentTab === 'report' && <AnalysisReport language={language} />}
         {currentTab === 'settings' && (
           <Settings language={language} setLanguage={setLanguage} />
         )}

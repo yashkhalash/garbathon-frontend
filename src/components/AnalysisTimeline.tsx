@@ -1,6 +1,7 @@
 import React from 'react';
 import { TimelineEvent, WarningLanguage } from '../types/analysis';
 import { formatTime } from '../utils/audioValidation';
+import { TRANSLATIONS } from '../utils/translations';
 
 interface AnalysisTimelineProps {
   events: TimelineEvent[];
@@ -10,13 +11,16 @@ interface AnalysisTimelineProps {
 
 export const AnalysisTimeline: React.FC<AnalysisTimelineProps> = ({
   events,
+  language = 'gu',
   onSeekTo,
 }) => {
+  const t = TRANSLATIONS[language]?.timeline || TRANSLATIONS.gu.timeline;
+
   if (events.length === 0) {
     return (
       <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm text-center">
         <p className="text-sm font-medium text-slate-400">
-          No chronological timeline events logged yet. Select a call and start playback above.
+          {t.emptyText}
         </p>
       </div>
     );
@@ -26,10 +30,10 @@ export const AnalysisTimeline: React.FC<AnalysisTimelineProps> = ({
     <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 sm:p-6 border border-slate-200 dark:border-slate-800 shadow-sm transition-colors duration-300">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-base font-bold text-navy-900 dark:text-white">
-          Chronological Detection Timeline
+          {t.title}
         </h3>
         <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-          {events.length} Event{events.length !== 1 ? 's' : ''} Recorded
+          {events.length} {t.eventsRecorded}
         </span>
       </div>
 

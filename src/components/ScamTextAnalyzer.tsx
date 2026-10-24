@@ -16,6 +16,8 @@ import {
 import { WarningLanguage, RiskLevel, RedFlag } from '../types/analysis';
 import { speechWarningService } from '../services/speechWarningService';
 import { soundManager } from '../utils/soundManager';
+import { VoiceExplainerButton } from './VoiceExplainerButton';
+import { TRANSLATIONS } from '../utils/translations';
 
 interface ScamTextAnalyzerProps {
   language: WarningLanguage;
@@ -339,6 +341,16 @@ export const ScamTextAnalyzer: React.FC<ScamTextAnalyzerProps> = ({
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-0.5">
             {t.subtitle}
           </p>
+        </div>
+
+        <div className="self-start sm:self-center">
+          <VoiceExplainerButton
+            textToSpeak={TRANSLATIONS[language]?.voiceExplainer?.testStudio || TRANSLATIONS.gu.voiceExplainer.testStudio}
+            language={language}
+            variant="blue"
+            size="md"
+            testId="voice-explain-test-studio"
+          />
         </div>
       </div>
 

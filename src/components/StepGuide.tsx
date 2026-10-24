@@ -2,6 +2,7 @@ import React from 'react';
 import { Upload, PlayCircle, Eye, PhoneForwarded } from 'lucide-react';
 import { WarningLanguage } from '../types/analysis';
 import { TRANSLATIONS } from '../utils/translations';
+import { VoiceExplainerButton } from './VoiceExplainerButton';
 
 interface StepGuideProps {
   currentStep: number;
@@ -10,6 +11,7 @@ interface StepGuideProps {
 
 export const StepGuide: React.FC<StepGuideProps> = ({ currentStep, language }) => {
   const t = TRANSLATIONS[language]?.steps || TRANSLATIONS.gu.steps;
+  const explainerText = TRANSLATIONS[language]?.voiceExplainer?.howItWorks || TRANSLATIONS.gu.voiceExplainer.howItWorks;
 
   const steps = [
     {
@@ -40,13 +42,22 @@ export const StepGuide: React.FC<StepGuideProps> = ({ currentStep, language }) =
 
   return (
     <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-sm transition-colors duration-300">
-      <div className="flex items-center justify-between mb-3 border-b border-slate-100 dark:border-slate-800 pb-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3 border-b border-slate-100 dark:border-slate-800 pb-2">
         <span className="text-xs font-black uppercase tracking-wider text-blue-600 dark:text-blue-400">
           {t.headerTitle}
         </span>
-        <span className="text-[11px] font-bold text-slate-400">
-          Step {currentStep} of 4 {t.stepActive}
-        </span>
+        <div className="flex items-center space-x-2 self-start sm:self-auto">
+          <VoiceExplainerButton
+            textToSpeak={explainerText}
+            language={language}
+            variant="blue"
+            size="sm"
+            testId="voice-explain-steps"
+          />
+          <span className="text-[11px] font-bold text-slate-400 whitespace-nowrap">
+            {currentStep} / 4 {t.stepActive}
+          </span>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">

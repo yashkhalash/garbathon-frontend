@@ -11,6 +11,8 @@ import {
   CheckCircle,
 } from 'lucide-react';
 import { WarningLanguage } from '../types/analysis';
+import { VoiceExplainerButton } from './VoiceExplainerButton';
+import { TRANSLATIONS } from '../utils/translations';
 
 interface AnimatedHowItWorksProps {
   language: WarningLanguage;
@@ -160,21 +162,31 @@ export const AnimatedHowItWorks: React.FC<AnimatedHowItWorksProps> = ({ language
           </p>
         </div>
 
-        {/* Step Indicator Badges */}
-        <div className="flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800/80 p-1.5 rounded-2xl border border-slate-300 dark:border-slate-700/60 flex-shrink-0">
-          {[1, 2, 3, 4].map((step) => (
-            <button
-              key={step}
-              onClick={() => setActiveStep(step)}
-              className={`w-8 h-8 rounded-xl font-mono text-xs font-black transition-all ${
-                activeStep === step
-                  ? 'bg-blue-600 text-white shadow-md shadow-blue-500/40 scale-105'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-navy-950 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-700/50'
-              }`}
-            >
-              0{step}
-            </button>
-          ))}
+        {/* Step Indicator Badges & Voice Explainer */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-shrink-0">
+          <VoiceExplainerButton
+            textToSpeak={TRANSLATIONS[language]?.voiceExplainer?.howItWorks || TRANSLATIONS.gu.voiceExplainer.howItWorks}
+            language={language}
+            variant="blue"
+            size="md"
+            testId="voice-explain-how-it-works"
+          />
+
+          <div className="flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800/80 p-1.5 rounded-2xl border border-slate-300 dark:border-slate-700/60 flex-shrink-0 self-start sm:self-auto">
+            {[1, 2, 3, 4].map((step) => (
+              <button
+                key={step}
+                onClick={() => setActiveStep(step)}
+                className={`w-8 h-8 rounded-xl font-mono text-xs font-black transition-all ${
+                  activeStep === step
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/40 scale-105'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-navy-950 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-700/50'
+                }`}
+              >
+                0{step}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
