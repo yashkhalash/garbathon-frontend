@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import {
   fetchAnalysisHistory,
+  subscribeToRealtimeAnalysisHistory,
   clearLocalHistory,
   restoreDefaultBenchmarkLogs,
   SavedAnalysisRecord,
@@ -48,6 +49,14 @@ export const AnalysisReport: React.FC<AnalysisReportProps> = ({ language = 'gu' 
 
   useEffect(() => {
     loadHistory();
+    const unsubscribe = subscribeToRealtimeAnalysisHistory((records) => {
+      setHistory(records);
+    });
+    return () => {
+      if (typeof unsubscribe === 'function') {
+        unsubscribe();
+      }
+    };
   }, []);
 
   const handleClear = () => {
@@ -114,6 +123,12 @@ export const AnalysisReport: React.FC<AnalysisReportProps> = ({ language = 'gu' 
                   ? 'कॉल का जोखिम, सुने गए सबूत और सुरक्षा कदम सरल भाषा में यहाँ देखें।'
                   : 'Plain-language audit records of verified calls, evidence heard, and protective counter-measures.')}
               </p>
+              <div className="mt-2 flex items-center space-x-2">
+                <span className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+                  <span>Realtime Database: fir-data-6644c-default-rtdb.firebaseio.com</span>
+                </span>
+              </div>
             </div>
           </div>
         </div>

@@ -1,10 +1,22 @@
 import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
 import { getAuth, Auth } from 'firebase/auth';
+import {
+  getDatabase,
+  ref as rtdbRef,
+  set as rtdbSet,
+  push as rtdbPush,
+  get as rtdbGet,
+  onValue,
+  query as rtdbQuery,
+  limitToLast,
+  Database,
+} from 'firebase/database';
 import { getFirestore, Firestore, collection, addDoc, query, orderBy, limit, getDocs } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCNhJxVmmAJIB1qR3GS-1kA7ergF9XnLJA",
   authDomain: "fir-data-6644c.firebaseapp.com",
+  databaseURL: "https://fir-data-6644c-default-rtdb.firebaseio.com",
   projectId: "fir-data-6644c",
   storageBucket: "fir-data-6644c.firebasestorage.app",
   messagingSenderId: "818767261022",
@@ -13,21 +25,33 @@ const firebaseConfig = {
 
 let app: FirebaseApp | null = null;
 let auth: Auth | null = null;
+let rtdb: Database | null = null;
 let db: Firestore | null = null;
 let isConfigured = false;
+let isRtdbConfigured = false;
 
 try {
   if (firebaseConfig.apiKey && firebaseConfig.projectId) {
     app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
     auth = getAuth(app);
-    db = getFirestore(app);
+    try {
+      rtdb = getDatabase(app);
+      isRtdbConfigured = true;
+    } catch (rtdbErr) {
+      console.warn("Realtime Database initialization warning:", rtdbErr);
+    }
+    try {
+      db = getFirestore(app);
+    } catch (firestoreErr) {
+      console.warn("Firestore initialization warning:", firestoreErr);
+    }
     isConfigured = true;
   }
 } catch (e) {
   console.warn("Firebase not fully configured or operating in local demo fallback:", e);
 }
 
-export { app, auth, db, isConfigured };
+export { app, auth, rtdb, db, isConfigured, isRtdbConfigured, firebaseConfig };
 
 export interface SavedRedFlag {
   category: string;
@@ -145,18 +169,38 @@ export const DEFAULT_BENCHMARK_LOGS: SavedAnalysisRecord[] = [
 ];
 
 export async function saveAnalysisSummary(record: Omit<SavedAnalysisRecord, 'id'>): Promise<string> {
-  if (db && isConfigured) {
+  let savedId: string | null = null;
+
+  // 1. Primary: Save to Firebase Realtime Database
+  if (rtdb && isRtdbConfigured) {
+    try {
+      const historyRef = rtdbRef(rtdb, 'analysisHistory');
+      const newRecordRef = rtdbPush(historyRef);
+      savedId = newRecordRef.key;
+      await rtdbSet(newRecordRef, {
+        ...record,
+        id: savedId,
+        createdAt: new Date().toISOString(),
+      });
+      console.log("Synced to Firebase Realtime Database at fir-data-6644c-default-rtdb:", savedId);
+    } catch (err) {
+      console.warn("Could not save to Realtime Database, trying fallback:", err);
+    }
+  }
+
+  // 2. Secondary: Firestore if configured
+  if (!savedId && db && isConfigured) {
     try {
       const docRef = await addDoc(collection(db, 'analysisHistory'), record);
-      return docRef.id;
+      savedId = docRef.id;
     } catch (err) {
       console.warn("Could not save to Firestore, falling back to local storage", err);
     }
   }
 
-  // Fallback to localStorage for privacy and offline testing
+  // 3. Fallback to localStorage for privacy, instant responsiveness and offline testing
   const history = getLocalHistory();
-  const id = `local_${Date.now()}`;
+  const id = savedId || `local_${Date.now()}`;
   history.unshift({ ...record, id });
   localStorage.setItem('suraksha_history', JSON.stringify(history.slice(0, 50)));
   return id;
@@ -293,6 +337,28 @@ export function restoreDefaultBenchmarkLogs(): SavedAnalysisRecord[] {
 }
 
 export async function fetchAnalysisHistory(): Promise<SavedAnalysisRecord[]> {
+  // 1. Primary: Firebase Realtime Database
+  if (rtdb && isRtdbConfigured) {
+    try {
+      const historyRef = rtdbRef(rtdb, 'analysisHistory');
+      const snapshot = await rtdbGet(rtdbQuery(historyRef, limitToLast(30)));
+      if (snapshot.exists()) {
+        const val = snapshot.val();
+        const records: SavedAnalysisRecord[] = Object.keys(val).map(key => ({
+          id: key,
+          ...val[key],
+        }));
+        records.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+        if (records.length > 0) {
+          return records.map(sanitizeRecordForUser);
+        }
+      }
+    } catch (e) {
+      console.warn("Error fetching from Firebase Realtime Database, trying fallback:", e);
+    }
+  }
+
+  // 2. Secondary: Firestore
   if (db && isConfigured) {
     try {
       const q = query(collection(db, 'analysisHistory'), orderBy('timestamp', 'desc'), limit(20));
@@ -305,5 +371,36 @@ export async function fetchAnalysisHistory(): Promise<SavedAnalysisRecord[]> {
       console.warn("Error fetching from Firestore, using local fallback", e);
     }
   }
+
   return getLocalHistory();
+}
+
+export function subscribeToRealtimeAnalysisHistory(callback: (records: SavedAnalysisRecord[]) => void): () => void {
+  if (rtdb && isRtdbConfigured) {
+    try {
+      const historyRef = rtdbRef(rtdb, 'analysisHistory');
+      const unsubscribe = onValue(rtdbQuery(historyRef, limitToLast(50)), (snapshot) => {
+        if (snapshot.exists()) {
+          const val = snapshot.val();
+          const records: SavedAnalysisRecord[] = Object.keys(val).map(key => ({
+            id: key,
+            ...val[key],
+          }));
+          records.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+          callback(records.map(sanitizeRecordForUser));
+        } else {
+          callback(getLocalHistory());
+        }
+      }, (error) => {
+        console.warn("Realtime Database subscription error:", error);
+        callback(getLocalHistory());
+      });
+      return unsubscribe;
+    } catch (e) {
+      console.warn("Could not subscribe to Realtime Database:", e);
+    }
+  }
+
+  callback(getLocalHistory());
+  return () => {};
 }
