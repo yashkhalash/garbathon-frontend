@@ -1,4 +1,5 @@
 import { WarningLanguage } from '../types/analysis';
+import { soundManager } from '../utils/soundManager';
 
 class SpeechWarningService {
   private isEnabled: boolean = true;
@@ -24,11 +25,13 @@ class SpeechWarningService {
 
   /**
    * Plays natural human speech using server-side neural TTS for Gujarati, Hindi, and Indian English.
-   * Falls back gracefully to browser SpeechSynthesis only if offline.
+   * Ensures any other playing audio is halted so sounds never overlap.
    */
   public async speak(text: string, lang: WarningLanguage = 'gu') {
     if (!this.isEnabled || !text) return;
 
+    // Halt any playing call audio or media before speaking
+    soundManager.stopAll(null, 'voice-warning');
     this.stop();
 
     try {
@@ -49,6 +52,7 @@ class SpeechWarningService {
           const audioSrc = `data:${data.mime_type || 'audio/mp3'};base64,${data.audio_b64}`;
           const audio = new Audio(audioSrc);
           this.currentAudio = audio;
+          soundManager.register(audio, 'voice-warning');
           audio.playbackRate = 1.0;
           await audio.play();
           audio.onended = () => {
@@ -63,6 +67,7 @@ class SpeechWarningService {
 
     // 2. Fallback to browser SpeechSynthesis
     if (this.synth) {
+      soundManager.stopAll(null, 'speech-synthesis');
       const utterance = new SpeechSynthesisUtterance(text);
       if (lang === 'gu') {
         utterance.lang = 'gu-IN';

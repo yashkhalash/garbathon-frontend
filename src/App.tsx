@@ -4,6 +4,7 @@ import { Dashboard } from './pages/Dashboard';
 import { LiveAudio } from './pages/LiveAudio';
 import { AnalysisReport } from './pages/AnalysisReport';
 import { Settings } from './pages/Settings';
+import { PageLoader } from './components/PageLoader';
 import { WarningLanguage } from './types/analysis';
 import { ThemeMode } from './types/theme';
 import { checkBackendHealth } from './services/scamAnalysisService';
@@ -13,6 +14,7 @@ export const App: React.FC = () => {
   const [language, setLanguage] = useState<WarningLanguage>('gu');
   const [isDemoMode, setIsDemoMode] = useState<boolean>(false);
   const [themeMode, setThemeMode] = useState<ThemeMode>('light');
+  const [isPageLoading, setIsPageLoading] = useState<boolean>(true);
 
   // Load theme preference
   useEffect(() => {
@@ -45,15 +47,18 @@ export const App: React.FC = () => {
   }, []);
 
   return (
-    <div
-      className={`min-h-screen flex flex-col font-sans transition-colors duration-300 ${
-        themeMode === 'dark'
-          ? 'bg-slate-950 text-slate-100'
-          : themeMode === 'senior'
-          ? 'bg-amber-50/40 text-black text-lg'
-          : 'bg-slate-50 text-slate-900'
-      }`}
-    >
+    <>
+      {isPageLoading && <PageLoader onComplete={() => setIsPageLoading(false)} />}
+
+      <div
+        className={`min-h-screen flex flex-col font-sans transition-colors duration-300 ${
+          themeMode === 'dark'
+            ? 'bg-slate-950 text-slate-100'
+            : themeMode === 'senior'
+            ? 'bg-amber-50/50 text-black text-lg'
+            : 'bg-slate-50 text-slate-900'
+        }`}
+      >
       <Header
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
@@ -87,6 +92,7 @@ export const App: React.FC = () => {
         </p>
       </footer>
     </div>
+    </>
   );
 };
 

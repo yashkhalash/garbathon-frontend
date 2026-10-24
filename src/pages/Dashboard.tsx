@@ -9,6 +9,9 @@ import { RedFlagCard } from '../components/RedFlagCard';
 import { WarningPanel } from '../components/WarningPanel';
 import { AnalysisTimeline } from '../components/AnalysisTimeline';
 import { PrivacyNotice } from '../components/PrivacyNotice';
+import { IndiaScamAnalytics } from '../components/IndiaScamAnalytics';
+import { AnimatedHowItWorks } from '../components/AnimatedHowItWorks';
+import { DashboardSkeleton } from '../components/DashboardSkeleton';
 import {
   StructuredAIResponse,
   WarningLanguage,
@@ -24,6 +27,7 @@ import { analyzeAudioChunk, DEMO_PRESETS } from '../services/scamAnalysisService
 import { speechWarningService } from '../services/speechWarningService';
 import { saveAnalysisSummary } from '../services/firebase';
 import { TRANSLATIONS } from '../utils/translations';
+import { soundManager } from '../utils/soundManager';
 
 interface DashboardProps {
   language: WarningLanguage;
@@ -31,6 +35,7 @@ interface DashboardProps {
 }
 
 export const Dashboard: React.FC<DashboardProps> = ({ language, isDemoMode }) => {
+  const [isInitialLoading, setIsInitialLoading] = useState<boolean>(true);
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   // Audio playback states
@@ -75,6 +80,11 @@ export const Dashboard: React.FC<DashboardProps> = ({ language, isDemoMode }) =>
     const savedName = localStorage.getItem('suraksha_contact_name');
     if (savedRel) setRelationship(savedRel);
     if (savedName) setContactName(savedName);
+
+    const timer = setTimeout(() => {
+      setIsInitialLoading(false);
+    }, 400);
+    return () => clearTimeout(timer);
   }, []);
 
   const isAnalyzingRef = useRef(isAnalyzing);
@@ -84,6 +94,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ language, isDemoMode }) =>
 
   // Handle Preset or File Selection
   const handleAudioSelected = async (file: File | null, presetUrl?: string, preset?: DemoCallPreset) => {
+    soundManager.stopAll();
     stopAnalysis();
     setIsPlaying(false);
     setCurrentTime(0);
@@ -246,6 +257,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ language, isDemoMode }) =>
   };
 
   const stopAnalysis = () => {
+    soundManager.stopAll();
     setIsAnalyzing(false);
     setIsPlaying(false);
     setIsProcessingChunk(false);
@@ -301,10 +313,17 @@ export const Dashboard: React.FC<DashboardProps> = ({ language, isDemoMode }) =>
     }
   };
 
+  if (isInitialLoading) {
+    return <DashboardSkeleton />;
+  }
+
   return (
     <div className="space-y-6">
       {/* Unique Feature: Aadhaar Vault Banner */}
       <AadhaarVaultBanner language={language} />
+
+      {/* Animated Walkthrough: How To Use Suraksha AI in 4 Steps */}
+      <AnimatedHowItWorks language={language} />
 
       {/* 4-Step Visual Progress Guide */}
       <StepGuide currentStep={currentStep} language={language} />
@@ -408,6 +427,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ language, isDemoMode }) =>
           </div>
         </div>
       </div>
+
+      {/* Official Government Cybercrime Analytics (I4C & NCRB Demographics) */}
+      <IndiaScamAnalytics language={language} />
 
       {/* Chronological Timeline */}
       <AnalysisTimeline

@@ -101,4 +101,39 @@ test.describe('Suraksha AI — Comprehensive E2E Playwright Test Suite', () => {
     await expect(page.locator('text=Red Flags Heard in Call').first()).toBeVisible({ timeout: 25000 });
     await expect(page.locator('text=Emergency Isolation Breaker').first()).toBeVisible({ timeout: 25000 });
   });
+
+  test('Government Cybercrime Analytics (I4C/NCRB) & Demographics (GenZ, Women, Men, Seniors)', async ({ page }) => {
+    // Select English for clear matching
+    await page.locator('[data-testid="language-select"]').selectOption('en');
+
+    // Verify Government Data section presence
+    await expect(page.locator('text=Mobile Scam Epidemic in India: Who Is Getting Targeted?').first()).toBeVisible({ timeout: 10000 });
+    await expect(page.locator('text=₹10,319+ Cr').first()).toBeVisible();
+    await expect(page.locator('text=₹1,750+ Cr').first()).toBeVisible();
+
+    // Verify Demographics: Seniors, Gen Z, Men, Women
+    await expect(page.locator('text=Older Persons / Senior Citizens').first()).toBeVisible();
+    await expect(page.locator('text=Students, Children & Gen Z').first()).toBeVisible();
+    await expect(page.locator('text=Working Men').first()).toBeVisible();
+    await expect(page.locator('text=Women & Homemakers').first()).toBeVisible();
+
+    // Verify Interactive 4-step user walkthrough
+    await expect(page.locator('text=How to Use Suraksha AI in 4 Simple Steps').first()).toBeVisible();
+    await page.locator('button:has-text("02")').first().click();
+    await expect(page.locator('text=Gemini 2.5 Flash Native Processing').first()).toBeVisible();
+  });
+
+  test('Senior Citizen Accessible Mode and Responsive Layout', async ({ page }) => {
+    // Activate Senior Citizen Accessible Theme
+    const seniorBtn = page.locator('button[title="Senior Citizen Accessible Theme"]');
+    await seniorBtn.click();
+    await expect(page.locator('html')).toHaveClass(/senior-theme/);
+
+    // Verify Senior theme branding badge
+    await expect(page.locator('text=વરિષ્ઠ મોડ').first()).toBeVisible();
+
+    // Verify Navigation works across tabs
+    await page.locator('nav button:has-text("લાઈવ"), nav button:has-text("Live")').first().click();
+    await expect(page.locator('text=Live Microphone Scam Assistant').first()).toBeVisible({ timeout: 10000 });
+  });
 });

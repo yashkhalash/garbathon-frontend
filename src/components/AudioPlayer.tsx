@@ -3,6 +3,7 @@ import { Play, Pause, RotateCcw, Cpu } from 'lucide-react';
 import { formatTime } from '../utils/audioValidation';
 import { WarningLanguage } from '../types/analysis';
 import { TRANSLATIONS } from '../utils/translations';
+import { soundManager } from '../utils/soundManager';
 
 interface AudioPlayerProps {
   audioUrl: string | null;
@@ -38,9 +39,18 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const t = TRANSLATIONS[language]?.player || TRANSLATIONS.gu.player;
 
+  // Register with Global Sound Manager so no overlapping sounds ever occur
+  useEffect(() => {
+    if (audioRef.current) {
+      const unregister = soundManager.register(audioRef.current, 'call-player');
+      return () => unregister();
+    }
+  }, [audioUrl]);
+
   useEffect(() => {
     if (audioRef.current) {
       if (isPlaying) {
+        soundManager.stopAll(audioRef.current, 'call-player');
         audioRef.current.play().catch(console.error);
       } else {
         audioRef.current.pause();

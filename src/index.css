@@ -8,23 +8,54 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Senior Citizen Accessibility Mode */
+/* Senior Citizen High-Contrast & Accessibility Mode */
 .senior-theme {
-  font-size: 1.125rem;
+  font-size: 1.15rem;
+  letter-spacing: 0.015em;
 }
 
 .senior-theme button,
 .senior-theme select,
 .senior-theme input {
-  font-size: 1rem !important;
-  font-weight: 700 !important;
+  font-size: 1.05rem !important;
+  font-weight: 800 !important;
+  min-height: 44px;
 }
 
-.senior-theme h2 {
-  font-size: 1.5rem !important;
+.senior-theme header {
+  border-bottom: 3px solid #f59e0b !important;
+}
+
+.senior-theme .bg-white {
+  border-color: #f59e0b !important;
+  box-shadow: 0 4px 20px -2px rgba(245, 158, 11, 0.15) !important;
+}
+
+.senior-theme h1,
+.senior-theme h2,
+.senior-theme h3 {
   font-weight: 900 !important;
+  color: #0f172a !important;
 }
 
 .senior-theme p {
-  line-height: 1.6 !important;
+  line-height: 1.7 !important;
+  font-weight: 600 !important;
+  color: #1e293b !important;
+}
+
+/* Shimmer pulse effect for Skeleton */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
 }
