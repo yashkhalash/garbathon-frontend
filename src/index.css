@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Senior Citizen Accessibility Mode */
+.senior-theme {
+  font-size: 1.125rem;
+}
+
+.senior-theme button,
+.senior-theme select,
+.senior-theme input {
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+}
+
+.senior-theme h2 {
+  font-size: 1.5rem !important;
+  font-weight: 900 !important;
+}
+
+.senior-theme p {
+  line-height: 1.6 !important;
+}
