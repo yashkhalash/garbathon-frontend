@@ -140,7 +140,7 @@ export const AnimatedHowItWorks: React.FC<AnimatedHowItWorksProps> = ({ language
   const t = content[language] || content.gu;
 
   return (
-    <section className="bg-gradient-to-br from-slate-900 via-[#0d162a] to-slate-900 rounded-3xl p-6 sm:p-8 border border-blue-500/20 text-white shadow-2xl relative overflow-hidden">
+    <section className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border-2 border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white shadow-xl relative overflow-hidden transition-all duration-300">
       {/* Background Neon Horizon Decor */}
       <div className="absolute -top-24 -right-24 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -148,20 +148,20 @@ export const AnimatedHowItWorks: React.FC<AnimatedHowItWorksProps> = ({ language
       {/* Top Section Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-8 relative z-10">
         <div>
-          <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30 text-[10px] font-black uppercase tracking-wider mb-2">
-            <Sparkles className="w-3 h-3 text-yellow-300" />
+          <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-blue-500/15 text-blue-700 dark:text-blue-300 border border-blue-400/30 text-[10px] font-black uppercase tracking-wider mb-2">
+            <Sparkles className="w-3 h-3 text-amber-500 dark:text-yellow-300" />
             <span>{t.badge}</span>
           </span>
-          <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">
+          <h2 className="text-xl sm:text-2xl font-black tracking-tight text-slate-950 dark:text-white">
             {t.title}
           </h2>
-          <p className="text-xs sm:text-sm text-slate-300 mt-1">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
             {t.subtitle}
           </p>
         </div>
 
         {/* Step Indicator Badges */}
-        <div className="flex items-center space-x-1.5 bg-slate-800/80 p-1.5 rounded-2xl border border-slate-700/60 flex-shrink-0">
+        <div className="flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800/80 p-1.5 rounded-2xl border border-slate-300 dark:border-slate-700/60 flex-shrink-0">
           {[1, 2, 3, 4].map((step) => (
             <button
               key={step}
@@ -169,7 +169,7 @@ export const AnimatedHowItWorks: React.FC<AnimatedHowItWorksProps> = ({ language
               className={`w-8 h-8 rounded-xl font-mono text-xs font-black transition-all ${
                 activeStep === step
                   ? 'bg-blue-600 text-white shadow-md shadow-blue-500/40 scale-105'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-navy-950 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-700/50'
               }`}
             >
               0{step}
@@ -191,8 +191,8 @@ export const AnimatedHowItWorks: React.FC<AnimatedHowItWorksProps> = ({ language
               onClick={() => setActiveStep(stepNum)}
               className={`p-5 rounded-2xl border cursor-pointer transition-all duration-300 flex flex-col justify-between ${
                 isCurrent
-                  ? 'bg-blue-950/60 border-blue-400 shadow-xl shadow-blue-600/20 scale-[1.02] ring-2 ring-blue-400/40'
-                  : 'bg-slate-800/50 border-slate-700/60 hover:border-slate-500 hover:bg-slate-800/80'
+                  ? 'bg-blue-50/90 dark:bg-blue-950/60 border-blue-500 shadow-md ring-2 ring-blue-400/40 scale-[1.02]'
+                  : 'bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700/60 hover:bg-slate-100 dark:hover:bg-slate-800/80'
               }`}
             >
               <div>
@@ -200,8 +200,8 @@ export const AnimatedHowItWorks: React.FC<AnimatedHowItWorksProps> = ({ language
                   <div
                     className={`p-2.5 rounded-xl ${
                       isCurrent
-                        ? 'bg-blue-500 text-white shadow-lg'
-                        : 'bg-slate-700/60 text-slate-300'
+                        ? 'bg-blue-600 text-white shadow-md'
+                        : 'bg-slate-200 dark:bg-slate-700/60 text-slate-700 dark:text-slate-300'
                     }`}
                   >
                     <Icon className="w-5 h-5" />
@@ -211,18 +211,18 @@ export const AnimatedHowItWorks: React.FC<AnimatedHowItWorksProps> = ({ language
                   </span>
                 </div>
 
-                <h3 className="font-black text-sm sm:text-base text-white mb-2 leading-snug">
+                <h3 className="font-black text-sm sm:text-base text-navy-950 dark:text-white mb-2 leading-snug">
                   {step.title}
                 </h3>
 
-                <p className="text-xs text-slate-300 leading-relaxed mb-3">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-3">
                   {step.desc}
                 </p>
               </div>
 
-              <div className="pt-3 border-t border-slate-700/60">
-                <p className="text-[11px] text-blue-300 font-medium flex items-center space-x-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400 flex-shrink-0 animate-ping" />
+              <div className="pt-3 border-t border-slate-200 dark:border-slate-700/60">
+                <p className="text-[11px] text-blue-600 dark:text-blue-300 font-bold flex items-center space-x-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0 animate-ping" />
                   <span>{step.tip}</span>
                 </p>
               </div>

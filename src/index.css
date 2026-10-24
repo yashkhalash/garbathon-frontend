@@ -8,40 +8,85 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Senior Citizen High-Contrast & Accessibility Mode */
+/* Senior Citizen High-Contrast Accessible Light Theme */
 .senior-theme {
+  background-color: #fcfbfa !important;
+  color: #090e17 !important;
   font-size: 1.15rem;
   letter-spacing: 0.015em;
 }
 
-.senior-theme button,
-.senior-theme select,
-.senior-theme input {
-  font-size: 1.05rem !important;
-  font-weight: 800 !important;
-  min-height: 44px;
+.senior-theme body,
+.senior-theme main {
+  background-color: #fcfbfa !important;
 }
 
 .senior-theme header {
-  border-bottom: 3px solid #f59e0b !important;
+  background-color: #ffffff !important;
+  color: #090e17 !important;
+  border-bottom: 4px solid #f59e0b !important;
+  box-shadow: 0 4px 20px -2px rgba(245, 158, 11, 0.2) !important;
 }
 
-.senior-theme .bg-white {
-  border-color: #f59e0b !important;
-  box-shadow: 0 4px 20px -2px rgba(245, 158, 11, 0.15) !important;
+.senior-theme header h1,
+.senior-theme header h2,
+.senior-theme header span:not(.bg-emerald-500):not(.bg-indigo-500):not(.bg-amber-400),
+.senior-theme header p {
+  color: #090e17 !important;
+}
+
+.senior-theme button,
+.senior-theme select,
+.senior-theme input,
+.senior-theme textarea {
+  font-size: 1.05rem !important;
+  font-weight: 800 !important;
+  min-height: 46px;
+}
+
+.senior-theme .bg-white,
+.senior-theme section {
+  background-color: #ffffff !important;
+  border: 2px solid #f59e0b !important;
+  box-shadow: 0 4px 16px -2px rgba(245, 158, 11, 0.15) !important;
+  color: #090e17 !important;
 }
 
 .senior-theme h1,
 .senior-theme h2,
-.senior-theme h3 {
+.senior-theme h3,
+.senior-theme h4 {
   font-weight: 900 !important;
-  color: #0f172a !important;
+  color: #090e17 !important;
 }
 
-.senior-theme p {
+.senior-theme p,
+.senior-theme li {
+  color: #1e293b !important;
   line-height: 1.7 !important;
   font-weight: 600 !important;
-  color: #1e293b !important;
+}
+
+.senior-theme div[class*="bg-slate-9"],
+.senior-theme div[class*="bg-slate-8"],
+.senior-theme div[class*="bg-[#0a0f1d]"],
+.senior-theme div[class*="bg-[#120f0a]"],
+.senior-theme div[class*="bg-slate-950"],
+.senior-theme div[class*="bg-slate-900"] {
+  background-color: #ffffff !important;
+  color: #090e17 !important;
+  border-color: #f59e0b !important;
+}
+
+.senior-theme .text-white,
+.senior-theme .text-slate-100,
+.senior-theme .text-slate-200,
+.senior-theme .text-slate-300 {
+  color: #090e17 !important;
+}
+
+.senior-theme .text-slate-400 {
+  color: #334155 !important;
 }
 
 /* Shimmer pulse effect for Skeleton */

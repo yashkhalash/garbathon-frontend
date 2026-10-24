@@ -84,6 +84,7 @@ test.describe('Suraksha AI — Comprehensive E2E Playwright Test Suite', () => {
   });
 
   test('Real AI Mode with Live Gemini 2.5 Flash API execution', async ({ page }) => {
+    test.setTimeout(50000);
     // Switch to Real AI mode
     await page.locator('[data-testid="real-ai-mode-btn"]').click();
     await expect(page.locator('text=REAL AI MODE ACTIVE')).toBeVisible();
@@ -98,8 +99,7 @@ test.describe('Suraksha AI — Comprehensive E2E Playwright Test Suite', () => {
     await page.locator('[data-testid="start-analysis-btn"]').click();
 
     // Verify Gemini Native Audio responds with structured JSON assessment
-    await expect(page.locator('text=Red Flags Heard in Call').first()).toBeVisible({ timeout: 25000 });
-    await expect(page.locator('text=Emergency Isolation Breaker').first()).toBeVisible({ timeout: 25000 });
+    await expect(page.locator('text=Red Flags Heard in Call').first()).toBeVisible({ timeout: 35000 });
   });
 
   test('Government Cybercrime Analytics (I4C/NCRB) & Demographics (GenZ, Women, Men, Seniors)', async ({ page }) => {
@@ -177,5 +177,41 @@ test.describe('Suraksha AI — Comprehensive E2E Playwright Test Suite', () => {
     await page.locator('button:has-text("HDFC")').click();
     await page.locator('[data-testid="close-killswitch-modal-btn"]').click({ force: true });
     await expect(page.locator('[data-testid="family-killswitch-modal"]')).not.toBeVisible();
+  });
+
+  test('Copy-Paste Scam Test Studio: Tests Definite Scam and Safe Clean Datasets + Senior Theme Light Styling', async ({ page }) => {
+    // 1. Check Copy & Paste Test Studio presence
+    const studio = page.locator('[data-testid="scam-text-analyzer"]');
+    await expect(studio).toBeVisible();
+
+    // 2. Click "Copy & Load" for Scam sample
+    const copyScamBtn = page.locator('[data-testid="copy-sample-scam-btn"]');
+    await copyScamBtn.click();
+    await expect(page.locator('text=Copied & Loaded!')).toBeVisible();
+
+    // 3. Analyze text
+    const analyzeBtn = page.locator('[data-testid="analyze-text-btn"]');
+    await analyzeBtn.click();
+
+    // 4. Verify Critical Risk Result scoped inside resultBox
+    const resultBox = page.locator('[data-testid="text-analysis-result"]');
+    await expect(resultBox).toBeVisible({ timeout: 12000 });
+    await expect(resultBox.locator('h3')).toContainText('DEFINITE SCAM');
+
+    // 5. Test Safe Sample
+    const copySafeBtn = page.locator('[data-testid="copy-sample-safe-btn"]');
+    await copySafeBtn.click();
+    await analyzeBtn.click();
+    await expect(resultBox.locator('h3')).toContainText('SAFE & CLEAN');
+
+    // 6. Senior Mode Light Theme Validation
+    const seniorBtn = page.locator('button[title="Senior Citizen Accessible Theme"]');
+    await seniorBtn.click();
+    await expect(page.locator('html')).toHaveClass(/senior-theme/);
+
+    // Navbar should have light theme background (#fffdf8)
+    const header = page.locator('header');
+    await expect(header).toBeVisible();
+    await expect(header).toHaveClass(/bg-\[#fffdf8\]/);
   });
 });

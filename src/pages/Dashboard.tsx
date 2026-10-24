@@ -10,6 +10,7 @@ import { WarningPanel } from '../components/WarningPanel';
 import { AnalysisTimeline } from '../components/AnalysisTimeline';
 import { PrivacyNotice } from '../components/PrivacyNotice';
 import { IndiaScamAnalytics } from '../components/IndiaScamAnalytics';
+import { ScamTextAnalyzer } from '../components/ScamTextAnalyzer';
 import { AnimatedHowItWorks } from '../components/AnimatedHowItWorks';
 import { DashboardSkeleton } from '../components/DashboardSkeleton';
 import { NewFeaturesGrid } from '../components/features/NewFeaturesGrid';
@@ -428,6 +429,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ language, isDemoMode }) =>
           </div>
         </div>
       </div>
+
+      {/* Interactive Copy-Paste Scam Test Studio (Safe vs Scam vs Partial) */}
+      <ScamTextAnalyzer language={language} isDemoMode={isDemoMode} />
 
       {/* Official Government Cybercrime Analytics (I4C & NCRB Demographics) */}
       <IndiaScamAnalytics language={language} />
