@@ -12,6 +12,7 @@ interface VoiceExplainerButtonProps {
   variant?: 'blue' | 'amber' | 'purple' | 'emerald';
   className?: string;
   testId?: string;
+  compact?: boolean;
 }
 
 export const VoiceExplainerButton: React.FC<VoiceExplainerButtonProps> = ({
@@ -22,6 +23,7 @@ export const VoiceExplainerButton: React.FC<VoiceExplainerButtonProps> = ({
   variant = 'blue',
   className = '',
   testId,
+  compact = false,
 }) => {
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
 
@@ -49,8 +51,24 @@ export const VoiceExplainerButton: React.FC<VoiceExplainerButtonProps> = ({
     },
   };
 
+  const compactLabels = {
+    gu: {
+      listen: "અવાજ AI",
+      stop: "રોકો",
+    },
+    hi: {
+      listen: "स्वर AI",
+      stop: "रोकें",
+    },
+    en: {
+      listen: "Voice AI",
+      stop: "Stop",
+    },
+  };
+
   const t = defaultLabels[language] || defaultLabels.gu;
-  const currentLabel = isSpeaking ? t.stop : label || t.listen;
+  const c = compactLabels[language] || compactLabels.gu;
+  const currentLabel = isSpeaking ? (compact ? c.stop : t.stop) : label || (compact ? c.listen : t.listen);
 
   const handleToggle = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -84,33 +102,41 @@ export const VoiceExplainerButton: React.FC<VoiceExplainerButtonProps> = ({
       : 'bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700',
   };
 
-  const sizeStyles = size === 'sm' ? 'px-2.5 py-1.5 text-xs' : 'px-3.5 py-2 text-xs sm:text-sm font-bold';
+  const sizeStyles = compact
+    ? 'px-2 sm:px-2.5 py-1.5 text-xs'
+    : size === 'sm'
+    ? 'px-2.5 py-1.5 text-xs'
+    : 'px-3.5 py-2 text-xs sm:text-sm font-bold';
 
   return (
     <button
       type="button"
       onClick={handleToggle}
       data-testid={testId || `voice-explain-btn-${language}`}
-      className={`inline-flex items-center space-x-1.5 rounded-xl border font-bold transition-all duration-200 active:scale-95 shadow-sm whitespace-nowrap ${variantStyles[variant]} ${sizeStyles} ${className}`}
-      title={isSpeaking ? t.stop : `${currentLabel} (Natural Female Neural Voice)`}
+      className={`inline-flex items-center space-x-1 sm:space-x-1.5 rounded-xl border font-bold transition-all duration-200 active:scale-95 shadow-sm whitespace-nowrap flex-shrink-0 ${variantStyles[variant]} ${sizeStyles} ${className}`}
+      title={isSpeaking ? t.stop : `${t.listen} (Natural Female Neural Voice)`}
     >
       {isSpeaking ? (
         <>
-          <VolumeX className="w-3.5 h-3.5 animate-pulse text-white" />
+          <VolumeX className="w-3.5 h-3.5 animate-pulse text-white flex-shrink-0" />
           <span className="font-black text-white">{currentLabel}</span>
-          <span className="flex space-x-0.5 items-center">
-            <span className="w-1 h-2.5 bg-white rounded-full animate-bounce"></span>
-            <span className="w-1 h-3.5 bg-white rounded-full animate-bounce [animation-delay:0.15s]"></span>
-            <span className="w-1 h-2 bg-white rounded-full animate-bounce [animation-delay:0.3s]"></span>
-          </span>
+          {!compact && (
+            <span className="flex space-x-0.5 items-center">
+              <span className="w-1 h-2.5 bg-white rounded-full animate-bounce"></span>
+              <span className="w-1 h-3.5 bg-white rounded-full animate-bounce [animation-delay:0.15s]"></span>
+              <span className="w-1 h-2 bg-white rounded-full animate-bounce [animation-delay:0.3s]"></span>
+            </span>
+          )}
         </>
       ) : (
         <>
           <Volume2 className="w-3.5 h-3.5 flex-shrink-0" />
-          <span>{currentLabel}</span>
-          <span className="text-[9px] px-1 rounded bg-black/10 dark:bg-white/10 uppercase font-black tracking-tight">
-            Female AI
-          </span>
+          <span className={compact ? 'text-xs font-bold' : ''}>{currentLabel}</span>
+          {!compact && (
+            <span className="text-[9px] px-1 rounded bg-black/10 dark:bg-white/10 uppercase font-black tracking-tight">
+              Female AI
+            </span>
+          )}
         </>
       )}
     </button>

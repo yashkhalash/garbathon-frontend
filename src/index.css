@@ -2,10 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+html, body {
   font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 /* Senior Citizen High-Contrast Accessible Light Theme */

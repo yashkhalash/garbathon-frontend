@@ -51,7 +51,7 @@ export const App: React.FC = () => {
       {isPageLoading && <PageLoader onComplete={() => setIsPageLoading(false)} />}
 
       <div
-        className={`min-h-screen flex flex-col font-sans transition-colors duration-300 ${
+        className={`min-h-screen flex flex-col font-sans transition-colors duration-300 w-full overflow-x-hidden ${
           themeMode === 'dark'
             ? 'bg-slate-950 text-slate-100'
             : themeMode === 'senior'

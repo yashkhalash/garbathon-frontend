@@ -47,8 +47,10 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <>
       <header
-        className={`relative backdrop-blur-xl border-b sticky top-0 z-40 shadow-2xl transition-all duration-300 ${
-          isSenior ? 'bg-[#fffdf8] border-b-2 border-amber-500 text-slate-950 shadow-amber-500/10' : 'bg-[#0a0f1d]/95 border-slate-800/80 text-white'
+        className={`relative backdrop-blur-xl border-b sticky top-0 z-40 shadow-2xl transition-all duration-300 w-full max-w-full overflow-x-clip ${
+          isSenior
+            ? 'bg-[#fffdf8] border-b-2 border-amber-500 text-slate-950 shadow-amber-500/10'
+            : 'bg-[#0a0f1d]/95 border-slate-800/80 text-white'
         }`}
       >
         {/* Animated Neon Gradient Horizon Glow Bar */}
@@ -60,8 +62,13 @@ export const Header: React.FC<HeaderProps> = ({
           }`}
         />
 
-        <div className="w-full max-w-[1536px] mx-auto px-3 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between min-h-20 h-auto py-2 gap-2 sm:gap-4 flex-wrap xl:flex-nowrap">
+        {/* ========================================================
+            PRIMARY NAVBAR ROW (Row 1):
+            Brand + Main Tabs (xl+) + Primary Controls (Voice, Lang, Mode, Theme)
+           ======================================================== */}
+        <div className="w-full max-w-7xl 2xl:max-w-[1536px] mx-auto px-3 sm:px-6">
+          <div className="flex items-center justify-between min-h-16 sm:min-h-20 h-auto py-2 gap-2 sm:gap-4">
+            
             {/* 1. Left Brand Column */}
             <div
               className="flex items-center space-x-2.5 sm:space-x-3 cursor-pointer group flex-shrink-0 select-none py-1"
@@ -83,7 +90,7 @@ export const Header: React.FC<HeaderProps> = ({
                   }`}
                 >
                   <Shield
-                    className={`w-6 h-6 sm:w-7 sm:h-7 group-hover:scale-110 transition-transform duration-300 ${
+                    className={`w-5 h-5 sm:w-6 sm:h-6 group-hover:scale-110 transition-transform duration-300 ${
                       isSenior ? 'text-amber-700' : 'text-blue-400'
                     }`}
                   />
@@ -112,7 +119,7 @@ export const Header: React.FC<HeaderProps> = ({
                   </span>
                 </div>
                 <p
-                  className={`text-[10px] sm:text-[11px] font-medium tracking-normal hidden md:block whitespace-nowrap ${
+                  className={`text-[10px] sm:text-[11px] font-medium tracking-normal hidden 2xl:block whitespace-nowrap ${
                     isSenior ? 'text-slate-700 font-bold' : 'text-slate-400 font-medium'
                   }`}
                 >
@@ -131,7 +138,7 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <button
                 onClick={() => setCurrentTab('recordings')}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-black transition-all duration-200 whitespace-nowrap ${
+                className={`flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs font-black transition-all duration-200 whitespace-nowrap ${
                   currentTab === 'recordings'
                     ? isSenior
                       ? 'bg-amber-500 text-slate-950 shadow-md font-black'
@@ -147,7 +154,7 @@ export const Header: React.FC<HeaderProps> = ({
 
               <button
                 onClick={() => setCurrentTab('live')}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-black transition-all duration-200 whitespace-nowrap ${
+                className={`flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs font-black transition-all duration-200 whitespace-nowrap ${
                   currentTab === 'live'
                     ? isSenior
                       ? 'bg-amber-500 text-slate-950 shadow-md font-black'
@@ -163,7 +170,7 @@ export const Header: React.FC<HeaderProps> = ({
 
               <button
                 onClick={() => setCurrentTab('report')}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-black transition-all duration-200 whitespace-nowrap ${
+                className={`flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs font-black transition-all duration-200 whitespace-nowrap ${
                   currentTab === 'report'
                     ? isSenior
                       ? 'bg-amber-500 text-slate-950 shadow-md font-black'
@@ -179,7 +186,7 @@ export const Header: React.FC<HeaderProps> = ({
 
               <button
                 onClick={() => setCurrentTab('settings')}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-black transition-all duration-200 whitespace-nowrap ${
+                className={`flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs font-black transition-all duration-200 whitespace-nowrap ${
                   currentTab === 'settings'
                     ? isSenior
                       ? 'bg-amber-500 text-slate-950 shadow-md font-black'
@@ -194,132 +201,12 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             </nav>
 
-            {/* 3. Right Action Tools: 5 New Tools + Aadhaar Vault + Theme + Mode + Language */}
-            <div className="flex items-center space-x-1.5 sm:space-x-2.5 flex-shrink-0">
-              {/* 5 NEW AI TOOLS QUICK SHORTCUT */}
-              <button
-                onClick={() => {
-                  setCurrentTab('recordings');
-                  setTimeout(() => {
-                    document.getElementById('new-features-section')?.scrollIntoView({ behavior: 'smooth' });
-                  }, 80);
-                }}
-                data-testid="five-new-tools-nav-btn"
-                className={`relative group flex items-center space-x-1.5 px-2.5 sm:px-3 py-2 rounded-xl border text-xs font-black transition-all hover:scale-[1.03] active:scale-95 shadow-md ${
-                  isSenior
-                    ? 'bg-amber-100 border-amber-400 text-slate-950 hover:bg-amber-200'
-                    : 'bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-blue-500/20 border-indigo-400/50 hover:border-indigo-300 text-indigo-200'
-                }`}
-                title="Explore 5 New AI Fraud Protection Tools for GenZ & Older Persons"
-              >
-                <Sparkles className={`w-3.5 h-3.5 ${isSenior ? 'text-amber-600' : 'text-yellow-300'} group-hover:rotate-12 transition-transform`} />
-                <span className="whitespace-nowrap font-black hidden lg:inline">5 New Tools</span>
-                <span className="text-[9px] sm:text-[10px] font-black uppercase px-1.5 py-0.5 rounded-full bg-indigo-600 text-white animate-pulse tracking-wide">
-                  NEW
-                </span>
-              </button>
-
-              {/* EVALUATION PARAMETERS (100/100) QUICK SHORTCUT */}
-              <button
-                onClick={() => {
-                  setCurrentTab('recordings');
-                  setTimeout(() => {
-                    document.getElementById('hackathon-parameters-bar')?.scrollIntoView({ behavior: 'smooth' });
-                  }, 80);
-                }}
-                data-testid="parameters-nav-btn"
-                className={`relative group flex items-center space-x-1.5 px-2.5 sm:px-3 py-2 rounded-xl border text-xs font-black transition-all hover:scale-[1.03] active:scale-95 shadow-md ${
-                  isSenior
-                    ? 'bg-amber-100 border-amber-400 text-slate-950 hover:bg-amber-200'
-                    : 'bg-emerald-500/15 border-emerald-400/40 hover:border-emerald-300 text-emerald-200'
-                }`}
-                title="View All 6 Evaluation Parameters (100/100)"
-              >
-                <Flag className={`w-3.5 h-3.5 ${isSenior ? 'text-amber-700' : 'text-emerald-400'} group-hover:rotate-6 transition-transform`} />
-                <span className="whitespace-nowrap font-black hidden lg:inline">Parameters</span>
-                <span className="text-[9px] sm:text-[10px] font-black uppercase px-1.5 py-0.5 rounded-full bg-emerald-500 text-slate-950 tracking-wide">
-                  100/100
-                </span>
-              </button>
-
-              {/* UNIQUE AADHAAR VAULT (Pulsing Glow & Clear Text) */}
-              <button
-                onClick={() => setIsVaultOpen(true)}
-                data-testid="aadhaar-vault-nav-btn"
-                className={`relative group flex items-center space-x-1.5 sm:space-x-2 px-2.5 sm:px-3.5 py-2 rounded-xl border text-xs font-black transition-all hover:scale-[1.03] active:scale-95 shadow-md ${
-                  isSenior
-                    ? 'bg-amber-100 border-amber-400 text-slate-950 hover:bg-amber-200'
-                    : 'bg-gradient-to-r from-amber-500/15 via-rose-500/15 to-amber-500/15 border-amber-400/40 hover:border-amber-300 text-amber-200'
-                }`}
-                title="Open Aadhaar Biometric Freeze Vault against Digital Arrests"
-              >
-                <Lock className={`w-3.5 h-3.5 ${isSenior ? 'text-amber-700' : 'text-amber-400'} group-hover:rotate-6 transition-transform`} />
-                <span className="whitespace-nowrap font-black hidden sm:inline">Aadhaar Vault</span>
-                <span className="whitespace-nowrap font-black sm:hidden">Vault</span>
-
-                {/* Animated Pulsing Beacon */}
-                <div className="flex items-center space-x-1">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                  </span>
-                  <span className="text-[9px] sm:text-[10px] font-black uppercase px-1.5 py-0.5 rounded-full bg-emerald-500 text-slate-950 animate-pulse tracking-wide">
-                    NEW
-                  </span>
-                </div>
-              </button>
-
-              {/* Dynamic Theme Switcher with Clear Label */}
-              <div
-                className={`flex items-center rounded-xl p-1 border text-xs shadow-inner ${
-                  isSenior
-                    ? 'bg-amber-100/80 border-amber-300'
-                    : 'bg-slate-900/90 border-slate-800'
-                }`}
-              >
-                <button
-                  onClick={() => setThemeMode('light')}
-                  className={`p-1.5 rounded-lg transition-all ${
-                    themeMode === 'light'
-                      ? 'bg-blue-600 text-white shadow-sm'
-                      : isSenior
-                      ? 'text-slate-600 hover:text-slate-900'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                  title="Light Theme"
-                >
-                  <Sun className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => setThemeMode('dark')}
-                  className={`p-1.5 rounded-lg transition-all ${
-                    themeMode === 'dark'
-                      ? 'bg-blue-600 text-white shadow-sm'
-                      : isSenior
-                      ? 'text-slate-600 hover:text-slate-900'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                  title="Dark Theme"
-                >
-                  <Moon className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => setThemeMode('senior')}
-                  className={`flex items-center space-x-1 px-2 py-1 rounded-lg transition-all font-black ${
-                    isSenior
-                      ? 'bg-amber-500 text-slate-950 shadow-md ring-2 ring-amber-600'
-                      : 'text-slate-400 hover:text-amber-300'
-                  }`}
-                  title="Senior Citizen Accessible Theme"
-                >
-                  <Eye className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline text-[11px]">Senior</span>
-                </button>
-              </div>
-
+            {/* 3. Right Controls Group: Theme + Real AI/Demo + Voice Explainer + Language Select */}
+            <div className="flex items-center space-x-1.5 sm:space-x-2 flex-shrink-0">
+              
               {/* Real AI vs Demo Switch */}
               <div
-                className={`flex items-center rounded-xl p-1 border text-xs shadow-inner ${
+                className={`flex items-center rounded-xl p-1 border text-xs shadow-inner flex-shrink-0 ${
                   isSenior
                     ? 'bg-amber-100/80 border-amber-300'
                     : 'bg-slate-900/90 border-slate-800'
@@ -328,7 +215,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <button
                   onClick={() => setIsDemoMode(false)}
                   data-testid="real-ai-mode-btn"
-                  className={`flex items-center space-x-1 px-2 sm:px-3 py-1.5 rounded-lg font-black transition-all ${
+                  className={`flex items-center space-x-1 px-2 sm:px-2.5 py-1.5 rounded-lg font-black transition-all text-xs ${
                     !isDemoMode
                       ? isSenior
                         ? 'bg-emerald-600 text-white shadow-md'
@@ -346,7 +233,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <button
                   onClick={() => setIsDemoMode(true)}
                   data-testid="demo-mode-btn"
-                  className={`flex items-center space-x-1 px-2 sm:px-3 py-1.5 rounded-lg font-black transition-all ${
+                  className={`flex items-center space-x-1 px-2 sm:px-2.5 py-1.5 rounded-lg font-black transition-all text-xs ${
                     isDemoMode
                       ? 'bg-amber-600 text-white shadow-md'
                       : isSenior
@@ -360,39 +247,193 @@ export const Header: React.FC<HeaderProps> = ({
                 </button>
               </div>
 
-              {/* Language Selector Dropdown & Voice Explainer */}
-              <div className="flex items-center space-x-1.5">
-                <VoiceExplainerButton
-                  textToSpeak={TRANSLATIONS[language]?.voiceExplainer?.hero || TRANSLATIONS.gu.voiceExplainer.hero}
-                  language={language}
-                  variant={isSenior ? 'amber' : 'blue'}
-                  size="sm"
-                  testId="voice-explain-hero"
-                />
-
-                <div className="relative">
-                  <select
-                    value={language}
-                    onChange={(e) => setLanguage(e.target.value as WarningLanguage)}
-                    data-testid="language-select"
-                    className={`border rounded-xl px-2 sm:px-3 py-1.5 text-xs font-black focus:outline-none focus:ring-2 cursor-pointer shadow-sm transition-colors ${
-                      isSenior
-                        ? 'bg-white text-slate-950 border-amber-400 focus:ring-amber-500 font-bold'
-                        : 'bg-slate-900 text-white border-slate-700/80 focus:ring-blue-500 hover:border-slate-500'
-                    }`}
-                    title="Select preferred intervention language"
-                  >
-                    <option value="gu" className={isSenior ? 'bg-white text-slate-900 font-bold' : 'bg-slate-900 text-white font-bold'}>ગુજરાતી</option>
-                    <option value="hi" className={isSenior ? 'bg-white text-slate-900 font-bold' : 'bg-slate-900 text-white font-bold'}>हिन्दी</option>
-                    <option value="en" className={isSenior ? 'bg-white text-slate-900 font-bold' : 'bg-slate-900 text-white font-bold'}>English</option>
-                  </select>
-                </div>
+              {/* Dynamic Theme Switcher */}
+              <div
+                className={`flex items-center rounded-xl p-1 border text-xs shadow-inner flex-shrink-0 ${
+                  isSenior
+                    ? 'bg-amber-100/80 border-amber-300'
+                    : 'bg-slate-900/90 border-slate-800'
+                }`}
+              >
+                <button
+                  onClick={() => setThemeMode('light')}
+                  className={`p-1.5 rounded-lg transition-all ${
+                    themeMode === 'light'
+                      ? 'bg-blue-600 text-white shadow-sm'
+                      : isSenior
+                      ? 'text-slate-600 hover:text-slate-900'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                  title="Light Theme"
+                >
+                  <Sun className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  onClick={() => setThemeMode('dark')}
+                  className={`p-1.5 rounded-lg transition-all ${
+                    themeMode === 'dark'
+                      ? 'bg-blue-600 text-white shadow-sm'
+                      : isSenior
+                      ? 'text-slate-600 hover:text-slate-900'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                  title="Dark Theme"
+                >
+                  <Moon className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  onClick={() => setThemeMode('senior')}
+                  className={`flex items-center space-x-1 px-1.5 py-1 rounded-lg transition-all font-black ${
+                    isSenior
+                      ? 'bg-amber-500 text-slate-950 shadow-md ring-2 ring-amber-600'
+                      : 'text-slate-400 hover:text-amber-300'
+                  }`}
+                  title="Senior Citizen Accessible Theme"
+                >
+                  <Eye className="w-3.5 h-3.5" />
+                  <span className="hidden md:inline text-[11px]">Senior</span>
+                </button>
               </div>
+
+              {/* Compact Voice Explainer */}
+              <VoiceExplainerButton
+                textToSpeak={TRANSLATIONS[language]?.voiceExplainer?.hero || TRANSLATIONS.gu.voiceExplainer.hero}
+                language={language}
+                variant={isSenior ? 'amber' : 'blue'}
+                size="sm"
+                compact={true}
+                testId="voice-explain-hero"
+              />
+
+              {/* Language Selector Dropdown with Fixed Width Container to prevent disruption */}
+              <div className="relative w-24 sm:w-28 flex-shrink-0">
+                <select
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value as WarningLanguage)}
+                  data-testid="language-select"
+                  className={`w-full border rounded-xl px-2 sm:px-2.5 py-1.5 text-xs font-black focus:outline-none focus:ring-2 cursor-pointer shadow-sm transition-colors text-center ${
+                    isSenior
+                      ? 'bg-white text-slate-950 border-amber-400 focus:ring-amber-500 font-bold'
+                      : 'bg-slate-900 text-white border-slate-700/80 focus:ring-blue-500 hover:border-slate-500'
+                  }`}
+                  title="Select preferred intervention language"
+                >
+                  <option value="gu" className={isSenior ? 'bg-white text-slate-900 font-bold' : 'bg-slate-900 text-white font-bold'}>ગુજરાતી</option>
+                  <option value="hi" className={isSenior ? 'bg-white text-slate-900 font-bold' : 'bg-slate-900 text-white font-bold'}>हिन्दी</option>
+                  <option value="en" className={isSenior ? 'bg-white text-slate-900 font-bold' : 'bg-slate-900 text-white font-bold'}>English</option>
+                </select>
+              </div>
+
             </div>
           </div>
         </div>
 
-        {/* Responsive Mobile / Tablet Navigation Bar (below xl) */}
+        {/* ========================================================
+            SUB-NAVBAR ACTION TOOLBAR (Row 2):
+            Engine Status + Quick Highlights (5 New Tools, Parameters, Aadhaar Vault)
+           ======================================================== */}
+        <div
+          className={`w-full border-t transition-colors duration-200 ${
+            isSenior
+              ? 'bg-amber-100/60 border-amber-300/80 text-slate-950'
+              : 'bg-[#0b1224]/90 border-slate-800/80 text-slate-300'
+          }`}
+        >
+          <div className="max-w-7xl 2xl:max-w-[1536px] w-full mx-auto px-3 sm:px-6 py-1.5 sm:py-2 flex items-center justify-between gap-2 overflow-x-auto no-scrollbar">
+            {/* Left: Engine Status Indicator */}
+            <div className="flex items-center space-x-2 flex-shrink-0">
+              {isDemoMode ? (
+                <span className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-black bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/40 whitespace-nowrap">
+                  <AlertCircle className="w-3.5 h-3.5 text-amber-500 animate-pulse flex-shrink-0" />
+                  <span>⚠️ DEMO MODE ACTIVE — SIMULATED 3-TIER BENCHMARKS</span>
+                </span>
+              ) : (
+                <span className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-black bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-500/40 whitespace-nowrap">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping flex-shrink-0" />
+                  <span>✨ REAL AI MODE ACTIVE — NATIVE GEMINI 2.5 FLASH AUDIO ENGINE CONNECTED</span>
+                </span>
+              )}
+            </div>
+
+            {/* Right: Quick Highlights (5 New Tools, Parameters, Aadhaar Vault) */}
+            <div className="flex items-center space-x-2 flex-shrink-0">
+              {/* 5 NEW AI TOOLS QUICK SHORTCUT */}
+              <button
+                onClick={() => {
+                  setCurrentTab('recordings');
+                  setTimeout(() => {
+                    document.getElementById('new-features-section')?.scrollIntoView({ behavior: 'smooth' });
+                  }, 80);
+                }}
+                data-testid="five-new-tools-nav-btn"
+                className={`group flex items-center space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border text-xs font-black transition-all hover:scale-[1.02] active:scale-95 shadow-sm whitespace-nowrap ${
+                  isSenior
+                    ? 'bg-white border-amber-400 text-slate-950 hover:bg-amber-100'
+                    : 'bg-indigo-500/15 border-indigo-400/40 hover:border-indigo-300 text-indigo-200 hover:bg-indigo-500/25'
+                }`}
+                title="Explore 5 New AI Fraud Protection Tools for GenZ & Older Persons"
+              >
+                <Sparkles className={`w-3.5 h-3.5 ${isSenior ? 'text-amber-700' : 'text-yellow-300'} group-hover:rotate-12 transition-transform flex-shrink-0`} />
+                <span>5 New Tools</span>
+                <span className="text-[9px] font-black uppercase px-1.5 py-0.5 rounded-full bg-indigo-600 text-white tracking-wide">
+                  NEW
+                </span>
+              </button>
+
+              {/* EVALUATION PARAMETERS (100/100) QUICK SHORTCUT */}
+              <button
+                onClick={() => {
+                  setCurrentTab('recordings');
+                  setTimeout(() => {
+                    document.getElementById('hackathon-parameters-bar')?.scrollIntoView({ behavior: 'smooth' });
+                  }, 80);
+                }}
+                data-testid="parameters-nav-btn"
+                className={`group flex items-center space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border text-xs font-black transition-all hover:scale-[1.02] active:scale-95 shadow-sm whitespace-nowrap ${
+                  isSenior
+                    ? 'bg-white border-amber-400 text-slate-950 hover:bg-amber-100'
+                    : 'bg-emerald-500/15 border-emerald-400/40 hover:border-emerald-300 text-emerald-200 hover:bg-emerald-500/25'
+                }`}
+                title="View All 6 Evaluation Parameters (100/100)"
+              >
+                <Flag className={`w-3.5 h-3.5 ${isSenior ? 'text-amber-700' : 'text-emerald-400'} group-hover:rotate-6 transition-transform flex-shrink-0`} />
+                <span className="hidden sm:inline">Parameters</span>
+                <span className="text-[9px] font-black uppercase px-1.5 py-0.5 rounded-full bg-emerald-500 text-slate-950 tracking-wide font-black">
+                  100/100
+                </span>
+              </button>
+
+              {/* UNIQUE AADHAAR VAULT (Pulsing Glow & Clear Text) */}
+              <button
+                onClick={() => setIsVaultOpen(true)}
+                data-testid="aadhaar-vault-nav-btn"
+                className={`group flex items-center space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border text-xs font-black transition-all hover:scale-[1.02] active:scale-95 shadow-sm whitespace-nowrap ${
+                  isSenior
+                    ? 'bg-white border-amber-400 text-slate-950 hover:bg-amber-100'
+                    : 'bg-amber-500/15 border-amber-400/40 hover:border-amber-300 text-amber-200 hover:bg-amber-500/25'
+                }`}
+                title="Open Aadhaar Biometric Freeze Vault against Digital Arrests"
+              >
+                <Lock className={`w-3.5 h-3.5 ${isSenior ? 'text-amber-700' : 'text-amber-400'} group-hover:rotate-6 transition-transform flex-shrink-0`} />
+                <span className="hidden sm:inline">Aadhaar Vault</span>
+                <span className="sm:hidden">Vault</span>
+                <div className="flex items-center space-x-1">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                  </span>
+                  <span className="text-[9px] font-black uppercase px-1.5 py-0.5 rounded-full bg-emerald-500 text-slate-950 tracking-wide">
+                    NEW
+                  </span>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* ========================================================
+            MOBILE / TABLET NAVIGATION BAR (Row 3): (below xl)
+           ======================================================== */}
         <div
           className={`xl:hidden flex items-center justify-around border-t px-2 py-2 overflow-x-auto gap-1 ${
             isSenior
@@ -464,18 +505,6 @@ export const Header: React.FC<HeaderProps> = ({
             <span>{t.tabs.settings}</span>
           </button>
         </div>
-
-        {/* Dynamic Mode Sub-Banner with Animated Status Pill */}
-        {isDemoMode ? (
-          <div className="bg-amber-500 text-slate-950 px-4 py-1 text-xs font-black text-center tracking-wider flex items-center justify-center space-x-2 shadow-inner">
-            <span>⚠️ DEMO MODE ACTIVE — SIMULATED 3-TIER BENCHMARKS (SWITCH TO 'REAL AI' FOR LIVE GEMINI FLASH CALLS)</span>
-          </div>
-        ) : (
-          <div className="bg-emerald-600 text-white px-4 py-1 text-xs font-black text-center tracking-wider flex items-center justify-center space-x-2 shadow-inner">
-            <span className="w-2 h-2 rounded-full bg-white animate-ping"></span>
-            <span>✨ REAL AI MODE ACTIVE — NATIVE GEMINI 2.5 FLASH AUDIO ENGINE CONNECTED</span>
-          </div>
-        )}
       </header>
 
       {/* Aadhaar Vault Modal */}
