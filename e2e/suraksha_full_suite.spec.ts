@@ -214,4 +214,35 @@ test.describe('Suraksha AI — Comprehensive E2E Playwright Test Suite', () => {
     await expect(header).toBeVisible();
     await expect(header).toHaveClass(/bg-\[#fffdf8\]/);
   });
+
+  test('Settings Page: Gemini Model Selection with Recommended flag, API Key management and live limit testing', async ({ page }) => {
+    // 1. Navigate to Settings tab
+    await page.locator('nav button:has-text("સેટિંગ્સ"), nav button:has-text("Settings")').first().click();
+    await expect(page.locator('[data-testid="gemini-settings-section"]')).toBeVisible({ timeout: 10000 });
+
+    // 2. Verify Recommended Gemini 2.5 Flash option
+    const recommendedBadge = page.locator('text=(Recommended)');
+    await expect(recommendedBadge).toBeVisible();
+
+    // 3. Switch Model to Gemini 2.0 Flash
+    const model20Btn = page.locator('[data-testid="model-option-gemini-2.0-flash"]');
+    await model20Btn.click();
+    await expect(page.locator('text=Active model switched to gemini-2.0-flash')).toBeVisible();
+
+    // Switch back to Recommended 2.5 Flash
+    const model25Btn = page.locator('[data-testid="model-option-gemini-2.5-flash"]');
+    await model25Btn.click();
+
+    // 4. Test API Key Limits Button
+    const testBtn = page.locator('[data-testid="test-gemini-key-btn"]');
+    await expect(testBtn).toBeVisible();
+    await testBtn.click();
+
+    // Result callout should appear (either connection succeeded or rate limit detected)
+    await expect(page.locator('[data-testid="gemini-test-result"]')).toBeVisible({ timeout: 15000 });
+
+    // 5. Verify Add / Update Input Field
+    const apiKeyInput = page.locator('[data-testid="gemini-api-key-input"]');
+    await expect(apiKeyInput).toBeVisible();
+  });
 });
